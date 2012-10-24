@@ -7,3 +7,9 @@ bin/
 *.jar
 *.war
 *.ear
+
+# Stupid Eclipse crap
+*.prefs
+
+# Stupid git crap
+*.orig
