@@ -3,6 +3,13 @@ package maze;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+/*************************************************************************
+ * 
+ * @Author: Devin Barry
+ * @Date: 23.10.2012
+ * @LastModified: 24.10.2012
+ * 
+ *************************************************************************/
 public class Maze {
 	
 	//These are the data structures for the maze
