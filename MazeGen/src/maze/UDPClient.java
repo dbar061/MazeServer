@@ -8,6 +8,8 @@ public class UDPClient {
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 		DatagramSocket clientSocket = new DatagramSocket();
 		InetAddress IPAddress = InetAddress.getByName("localhost");
+		//InetAddress IPAddres = new InetAddress("192.168.252.107");
+		
 		System.out.println("IP Address: " + IPAddress);
 		byte[] sendData = new byte[1024];
 		byte[] receiveData = new byte[1024];
