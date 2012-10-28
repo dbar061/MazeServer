@@ -1,6 +1,8 @@
 package maze;
+
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import draw.StdDraw;
 
 
 /*************************************************************************

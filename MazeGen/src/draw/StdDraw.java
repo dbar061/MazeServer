@@ -82,7 +82,7 @@ import javax.swing.*;
 public final class StdDraw implements ActionListener, MouseListener,
 		MouseMotionListener, KeyListener {
 
-	// pre-defined colors. No need to import Color class
+	// pre-defined colours. No need to import Color class
 	public static final Color BLACK = Color.BLACK;
 	public static final Color BLUE = Color.BLUE;
 	public static final Color CYAN = Color.CYAN;
@@ -110,7 +110,7 @@ public final class StdDraw implements ActionListener, MouseListener,
 	 */
 	public static final Color BOOK_RED = new Color(150, 35, 31);
 	
-	public static final Color SADDLE_BROWN = new Color(139,69,19); //saddlebrown
+	public static final Color SADDLE_BROWN = new Color(139,69,19); //saddle brown
 
 	// default colors
 	private static final Color DEFAULT_PEN_COLOR = BLACK;
@@ -1539,5 +1539,9 @@ public final class StdDraw implements ActionListener, MouseListener,
 		//StdDraw.circle(0, 0, .2);
 		StdDraw.line(0, 0, 0, 1);
 	}
+	
+	public static JFrame getFrame() {
+    	return frame;
+    }
 
 }

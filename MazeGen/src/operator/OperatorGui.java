@@ -4,7 +4,7 @@ package operator;
 import java.awt.Point;
 
 import maze.Maze;
-import maze.StdDraw;
+import draw.StdDraw;
 
 public class OperatorGui {
 	public static final int WINDOW_LENGTH = 600;
