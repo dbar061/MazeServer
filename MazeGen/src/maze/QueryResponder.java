@@ -8,12 +8,26 @@ import java.net.InetSocketAddress;
 
 import server.ServerQuery;
 
+/**
+ * QueryResponder.java
+ * 
+ * Takes querys from Robots in BlokIDE and sends responses
+ * to these requests. This protocol is defined in our
+ * protocol document
+ * 
+ * @author:			Shafqat Bhuiyan
+ * @author:			Devin Barry
+ * @date:			27.10.2012
+ * @lastModified:	29.10.2012
+ * 
+ */
 public class QueryResponder extends Thread {
 	private final int QUERY_PORT = 9001;
 	private final int RESPONSE_PORT_BASE = 10002;
 	
 	private Maze maze;
 	private ServerQuery sq;
+	private String response;
 
 	public QueryResponder(Maze maze) {
 		this.maze = maze;
@@ -40,56 +54,72 @@ public class QueryResponder extends Thread {
 				String query = new String(receivePacket.getData());
 				
 				sq = new ServerQuery(receiveData); //create a new server query
-				
 				System.out.println("RECEIVED: " + query);
-
-				respondToQuery(query);
+				
+				fetchResponse(query);
+				
+				//If the query was valid, send a response
+				if (response != "") {
+					respondToQuery(query);
+				}
 
 				serverSocket.close();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
 
 	}
-
-	private void respondToQuery(String query) throws IOException {
-		String response = "";
+	
+	/**
+	 * Calculates the correct response for the query received
+	 * @param query
+	 */
+	private void fetchResponse(String query) {
+		response = "";
 		if (sq.getQuery().equals("obstacle")) {
 			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
-				response = "w"; //short for wall
+				response = "wall"; //short for wall
 			}
 			else {
-				response = "e"; //short for empty
+				response = "empty"; //short for empty
 			}
 		}
 		else if (sq.getQuery().equals("sensor")) {
-			if (maze.)
-			response = "true";
-			
-			
-
-			InetAddress sendingAddress = InetAddress.getByName("localhost");
-
-			byte[] sendData = new byte[1];
-
-			DatagramSocket clientSocket = new DatagramSocket();
-
-			sendData[0] = (byte) response.charAt(0);
-
-			System.out.println("Sending: " + (int) (sendData[0]));
-
-			int responsePort = RESPONSE_PORT_BASE + 1000 * (sq.getRobotID() - 1);
-
-			DatagramPacket sendPacket = new DatagramPacket(sendData,
-					sendData.length, sendingAddress, responsePort);
-			clientSocket.send(sendPacket);
-
-			clientSocket.close();
-		} else {
+			if (maze.getSensor(sq.getX(), sq.getY())) {
+				response = "true";
+			}
+			else {
+				response = "false";
+			}
+		}
+		else {
 			System.out.println("Invalid query: " + query);
 		}
 	}
+		
 
+	/**
+	 * Sends the response back to the requester
+	 * @param query
+	 * @throws IOException
+	 */
+	private void respondToQuery(String query) throws IOException {
+		InetAddress sendingAddress = InetAddress.getByName("localhost");
+		
+		//byte[] sendData = new byte[10];
+		DatagramSocket clientSocket = new DatagramSocket();
+		//sendData[0] = (byte) response.charAt(0);
+		byte[] sendData = response.getBytes();
+		
+		//System.out.println("Sending: " + (int) (sendData[0]));
+		System.out.println("Sending: " + response);
+		
+		int responsePort = RESPONSE_PORT_BASE + 1000 * (sq.getRobotID() - 1);
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, sendingAddress, responsePort);
+		clientSocket.send(sendPacket);
+		clientSocket.close();
+	}
 }
