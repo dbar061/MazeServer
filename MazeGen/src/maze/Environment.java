@@ -7,19 +7,18 @@ import draw.StdDraw;
 
 /*************************************************************************
  * 
- * @Author: Devin Barry
- * @Date: 09.10.2012
- * @LastModified: 24.10.2012
+ * @Author:			Devin Barry
+ * @Date:			09.10.2012
+ * @LastModified:	24.10.2012
  * 
- *                This code is based on maze gen code from an unspecified
- *                author. Original code is available from
- *                introcs.cs.princeton.edu
+ * This code is based on maze gen code from an unspecified author.
+ * Original code is available from introcs.cs.princeton.edu
  * 
- *                Generates a perfect N-by-N maze using depth-first search with
- *                a stack.
+ * Generates a perfect N-by-N maze using depth-first search with
+ * a stack.
  * 
- *                Note: this program generalises nicely to finding a random tree
- *                in a graph.
+ * Note: this program generalises nicely to finding a random tree
+ * in a graph.
  * 
  *************************************************************************/
 
@@ -79,30 +78,18 @@ public class Environment {
 		}
 	}
 
-	// a test client
+	/**
+	 * Main method for the environment server.
+	 * This server mimics environmental variables inside the 
+	 * submarine
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Environment enviroment = new Environment();
 		StdDraw.show(0);
 		enviroment.solve(true);
-		
-
-
-		while (true) {
-			enviroment.draw();
-			StdDraw.show(0);
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		// UDPServer udps = new UDPServer();
-		// try {
-		// udps.startServer(m);
-		// }
-		// catch (Exception e) {}
+		//no need for explicit animation calls
+		//animation is dealt with internally inside StdDraw
 	}
 
 }
