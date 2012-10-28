@@ -379,6 +379,7 @@ public class Maze implements Serializable {
 	 * @return
 	 */
 	public boolean getWall(String direction, int x, int y) {
+		if (x < size && x >= 0 && y < size && y >= 0) {
 		if (direction.equalsIgnoreCase("north")) {
 			return north[x][y];
 		}
@@ -393,4 +394,21 @@ public class Maze implements Serializable {
 		}
 		return false;
 	}
+	}
+	
+	/**
+	 * Returns whether a wall exists in the direction given from the coordinates
+	 * (x,y)
+	 * 
+	 * @param direction
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean getSensor(int x, int y) {
+		boolean sensor[][] = ms.getMotionSensors();
+		return sensor[x][y];
+	}
+	
+	
 }

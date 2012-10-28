@@ -39,7 +39,7 @@ public class QueryResponder extends Thread {
 				serverSocket.receive(receivePacket);
 				String query = new String(receivePacket.getData());
 				
-				sq = new ServerQuery(receiveData); //creat a new server query
+				sq = new ServerQuery(receiveData); //create a new server query
 				
 				System.out.println("RECEIVED: " + query);
 
@@ -55,19 +55,20 @@ public class QueryResponder extends Thread {
 	}
 
 	private void respondToQuery(String query) throws IOException {
+		String response = "";
 		if (sq.getQuery().equals("obstacle")) {
-		
-		//String[] tokens = query.split(",");
-		//int robotId = Integer.parseInt(tokens[0]);
-		//if (tokens[1].equals("obstacle")) {
-			//String direction = tokens[2];
-			//int x = Integer.parseInt(tokens[3]);
-			//int y = Integer.parseInt(tokens[4]);
-			String response = "e";
-
 			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
-				response = "w";
+				response = "w"; //short for wall
 			}
+			else {
+				response = "e"; //short for empty
+			}
+		}
+		else if (sq.getQuery().equals("sensor")) {
+			if (maze.)
+			response = "true";
+			
+			
 
 			InetAddress sendingAddress = InetAddress.getByName("localhost");
 
