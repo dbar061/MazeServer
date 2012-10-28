@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 public class ServerQuery {
 	
+	byte[] rawBytes;
 	String rawData;
 	int robotID;
 	String query;
@@ -11,15 +12,27 @@ public class ServerQuery {
 	int x;
 	int y;
 
-	public ServerQuery(String rawData) {
-		this.rawData = rawData;
+	public ServerQuery(byte[] rawBytes) {
+		this.rawBytes = rawBytes;
+		x = 0;
+		y = 0;
+		robotID = 0;
+		//convert raw bytes into a string
+		rawData = new String(rawBytes);
+		//split string into tokens
 		parseTokens();
 	}
 	
 	private void parseTokens() {
-		Pattern p = Pattern.compile("[, ]"); //comma or space
+		Pattern p = Pattern.compile("[,\\s\0]"); //comma or all white space and null (sometimes null is sent from C)
 		String regex = p.pattern();
 		String[] tokens = rawData.split(regex, 0); //apply pattern an infinite number of times
+		
+		//Debug
+		//System.out.print("tokens: ");
+		//for (String s: tokens) {
+		//	System.out.println("\"" + s + "\"");
+		//}
 		
 		try {
 			robotID = Integer.parseInt(tokens[0].trim());

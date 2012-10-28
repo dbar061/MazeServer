@@ -39,10 +39,8 @@ public class QueryResponder extends Thread {
 				serverSocket.receive(receivePacket);
 				String query = new String(receivePacket.getData());
 				
-				sq = new ServerQuery(query);
+				sq = new ServerQuery(receiveData); //creat a new server query
 				
-				query = query.replace((char) 0, ' '); // replace nulls with spaces
-				query = query.trim();
 				System.out.println("RECEIVED: " + query);
 
 				respondToQuery(query);
