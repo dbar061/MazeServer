@@ -1,23 +1,26 @@
 package maze;
-import java.awt.Point;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+
+import server.ServerQuery;
 
 public class QueryResponder extends Thread {
 	private final int QUERY_PORT = 9001;
 	private final int RESPONSE_PORT_BASE = 10002;
+	
 	private Maze maze;
+	private ServerQuery sq;
 
 	public QueryResponder(Maze maze) {
 		this.maze = maze;
 	}
 
 	public void run() {
+		byte[] receiveData;
 		while (true) {
 			try {
 				// Listen for query
@@ -26,13 +29,19 @@ public class QueryResponder extends Thread {
 													// on this port
 				serverSocket.bind(new InetSocketAddress("0.0.0.0", QUERY_PORT));
 
-				byte[] receiveData = new byte[1024];
+				//be completely certain that we clear the data array everytime
+				receiveData = new byte[1024];
+				for (int i = 0; i < receiveData.length; i++) {
+					receiveData[i] = (byte) 0;
+				}
 
-				DatagramPacket receivePacket = new DatagramPacket(receiveData,
-						receiveData.length);
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 				serverSocket.receive(receivePacket);
 				String query = new String(receivePacket.getData());
-				query = query.replace((char)0, ' ');	// replace nulls with spaces
+				
+				sq = new ServerQuery(query);
+				
+				query = query.replace((char) 0, ' '); // replace nulls with spaces
 				query = query.trim();
 				System.out.println("RECEIVED: " + query);
 
@@ -48,15 +57,17 @@ public class QueryResponder extends Thread {
 	}
 
 	private void respondToQuery(String query) throws IOException {
-		String[] tokens = query.split(",");
-		int robotId = Integer.parseInt(tokens[0]);
-		if (tokens[1].equals("obstacle")) {
-			String direction = tokens[2];
-			int x = Integer.parseInt(tokens[3]);
-			int y = Integer.parseInt(tokens[4]);
+		if (sq.getQuery().equals("obstacle")) {
+		
+		//String[] tokens = query.split(",");
+		//int robotId = Integer.parseInt(tokens[0]);
+		//if (tokens[1].equals("obstacle")) {
+			//String direction = tokens[2];
+			//int x = Integer.parseInt(tokens[3]);
+			//int y = Integer.parseInt(tokens[4]);
 			String response = "e";
-			
-			if(maze.getWall(direction, x, y)) {
+
+			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
 				response = "w";
 			}
 
@@ -66,11 +77,11 @@ public class QueryResponder extends Thread {
 
 			DatagramSocket clientSocket = new DatagramSocket();
 
-			sendData[0] = (byte)response.charAt(0);
+			sendData[0] = (byte) response.charAt(0);
 
 			System.out.println("Sending: " + (int) (sendData[0]));
-			
-			int responsePort = RESPONSE_PORT_BASE + 1000 * (robotId - 1);
+
+			int responsePort = RESPONSE_PORT_BASE + 1000 * (sq.getRobotID() - 1);
 
 			DatagramPacket sendPacket = new DatagramPacket(sendData,
 					sendData.length, sendingAddress, responsePort);

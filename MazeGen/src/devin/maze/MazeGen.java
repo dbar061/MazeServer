@@ -129,7 +129,7 @@ public class MazeGen {
 		MazeGen maze = new MazeGen(N);
 		StdDraw.show(0);
 		//maze.draw();
-		maze.solve(true);
+		maze.solve(false);
 		UDPServer udps = new UDPServer();
 		try {
 			udps.startServer(m);
