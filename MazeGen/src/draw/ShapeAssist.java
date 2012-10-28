@@ -3,19 +3,29 @@ package draw;
 /*************************************************************************
  * @Author:				Devin Barry
  * @Date:				21.10.2012
- * @LastModified:		22.10.2012
+ * @LastModified:		28.10.2012
  * 
  * @OriginalAuthor: 	Robert Sedgewick and Kevin Wayne
  * @location:			introcs.cs.princeton.edu
  * 
  * This class is based on work originally in StdDraw written by Robert
- * Sedgewick and Kevin Wayne. I have modified methods to improve flexability
- * of this class. The modifications were significant enough that I decided
- * these methods should be in thier own class, and not contribute to the
- * already very large size of StdDraw.
+ * Sedgewick and Kevin Wayne. However most of the methods here are either
+ * totally new (written by me) or highly modified. I have added
+ * significantly more power and flexability to the StdDraw library.
  * 
- * This class is completely an extension to StdDraw though and cannot be
- * used without it.
+ * I have modified methods to improve flexibility of this class. The
+ * modifications were significant enough that I decided these methods
+ * should be in their own class, and not contribute to the already very
+ * large size of StdDraw.
+ * 
+ * This class is entirely an extension to StdDraw and cannot be used
+ * without it. It is not stand alone, more like a break up of a large class
+ * into several smaller files. This is easy with StdDraw because the entire
+ * class is static.
+ * 
+ * ShapeAssist is about the construction of shapes used in the StdDraw
+ * library. The object of this class is to create java.awt.Shapes from
+ * each of these methods.
  * 
  * Of some importance is the fact that the addition of this class removed
  * an important aspect of the original StdDraw class. Shapes that are very
@@ -80,7 +90,7 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw a circle of radius r, centered on (x, y).
+	 * Create a circle of radius r, centered on (x, y).
 	 * 
 	 * @param x
 	 *            the x-coordinate of the center of the circle
@@ -105,7 +115,7 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw a circle of radius r, centered at <location>.
+	 * Create a circle of radius r, centered at <location>.
 	 * 
 	 * @param location
 	 *            the Point at the center of the circle
@@ -121,7 +131,7 @@ public final class ShapeAssist {
 	
 
 	/**
-	 * Draw an ellipse with given semimajor and semiminor axes, centered on (x,
+	 * Create an ellipse with given semimajor and semiminor axes, centered on (x,
 	 * y).
 	 * 
 	 * @param x
@@ -154,7 +164,7 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw an arc of radius r, centered on (x, y), from angle1 to angle2 (in
+	 * Create an arc of radius r, centered on (x, y), from angle1 to angle2 (in
 	 * degrees).
 	 * 
 	 * @param x
@@ -188,7 +198,7 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw a square of side length 2r, centered on (x, y).
+	 * Create a square of side length 2r, centered on (x, y).
 	 * 
 	 * @param x
 	 *            the x-coordinate of the center of the square
@@ -213,7 +223,7 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw a filled square of side length 2r, centered at <location>.
+	 * Create a filled square of side length 2r, centered at <location>.
 	 * 
 	 * @param location
 	 *            the Point at the center of the square
@@ -225,30 +235,80 @@ public final class ShapeAssist {
 	public static Rectangle2D.Double square(Point2D.Double location, double r) {
 		return square(location.getX(), location.getY(), r);
 	}
-
+	
 	/**
-	 * Draw a filled diamond of side length 2r, centered at <location>.
-	 * This method is repeated in StdDraw
+	 * Create a diamond of side length 2r, centred on (x, y).
 	 * 
-	 * @param location
-	 *            the Point at the center of the square
+	 * @param x
+	 *            the x-coordinate of the centre of the diamond
+	 * @param y
+	 *            the y-coordinate of the centre of the diamond
 	 * @param r
 	 *            radius is half the length of any side of the diamond
 	 * @throws RuntimeException
 	 *             if r is negative
 	 */
-	public static void filledDiamond(Point2D.Double location, double r) {
+	public static Path2D.Double diamond(double x, double y, double r) {
 		if (r < 0)
 			throw new RuntimeException("diamond side length can't be negative");
-		double cx = location.getX();
-		double cy = location.getY();
-		double[] x = { cx - r, cx, cx + r, cx };
-		double[] y = { cy, cy + r, cy, cy - r };
-		StdDraw.filledPolygon(x, y);
+		double[] xs = { x - r, x, x + r, x };
+		double[] ys = { y, y + r, y, y - r };
+		Path2D.Double path = new Path2D.Double();
+		path.moveTo(StdDraw.scaleX(xs[0]), StdDraw.scaleY(ys[0]));
+		for (int i = 0; i < 4; i++) //4 points in a diamond
+			path.lineTo(StdDraw.scaleX(xs[i]), StdDraw.scaleY(ys[i]));
+		path.closePath();
+		return path;
+	}
+	
+	/**
+	 * Create a diamond of side length 2r, centred at <location>.
+	 * 
+	 * @param location
+	 *            the Point at the centre of the square
+	 * @param r
+	 *            radius is half the length of any side of the diamond
+	 * @throws RuntimeException
+	 *             if r is negative
+	 */
+	public static Path2D.Double diamond(Point2D.Double location, double r) {
+		return diamond(location.getX(), location.getY(), r);
 	}
 
 	/**
-	 * Draw a rectangle of given half width and half height, centered on (x, y).
+	 * Create an equilateral triangle of radius r, centred at <location>.
+	 * 
+	 * @param location
+	 *            the Point at the centre of the triangle
+	 * @param r
+	 *            radius is the length from the centre of the triangle to
+	 *            any of its corners.
+	 * @throws RuntimeException
+	 *             if r is negative
+	 */
+	public static Path2D.Double triangle(double x, double y, double r) {
+		if (r < 0)
+			throw new RuntimeException("diamond side length can't be negative");
+		
+		//These are the triangle sides formed by connecting each corner
+		//of the triangle to its centre point
+		//30 degrees is half the internal angle of a equilateral triangle
+		double ady = r * Math.sin(Math.toRadians(30));
+		double adx = r * Math.cos(Math.toRadians(30));
+		
+		Point2D.Double c = new Point2D.Double(x, y + r);
+		Point2D.Double a = new Point2D.Double(x - adx, y - ady);
+		Point2D.Double b = new Point2D.Double(x + adx, y - ady);
+
+		double[] xs = { a.x, b.x, c.x };
+		double[] ys = { a.y, b.y, c.y };
+		//Polygon triangle = new Polygon(xs, ys, xs.length);
+		//Path2D.Double triangle = new Path2D.Double();
+		return ShapeAssist.polygon(xs, ys);
+	}
+
+	/**
+	 * Create a rectangle of given half width and half height, centered on (x, y).
 	 * 
 	 * @param x
 	 *            the x-coordinate of the center of the rectangle
@@ -278,7 +338,7 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw a filled rectangle of given half width and half height, centered at
+	 * Create a filled rectangle of given half width and half height, centered at
 	 * <location>.
 	 * 
 	 * @param location
@@ -295,7 +355,7 @@ public final class ShapeAssist {
 	}
 	
 	/**
-	 * Draw a rectangle of given half width and half height, centered on
+	 * Create a rectangle of given half width and half height, centered on
 	 * (x, y) and rotated by d degrees. The rotation is about the top
 	 * left corner of the rectangle.
 	 * 
@@ -344,19 +404,19 @@ public final class ShapeAssist {
 	}
 
 	/**
-	 * Draw a polygon with the given (x[i], y[i]) coordinates.
+	 * Create a polygon with the given (x[i], y[i]) coordinates.
 	 * 
 	 * @param x
 	 *            an array of all the x-coordindates of the polygon
 	 * @param y
 	 *            an array of all the y-coordindates of the polygon
 	 */
-	public static GeneralPath polygon(double[] x, double[] y) {
+	public static Path2D.Double polygon(double[] x, double[] y) {
 		int N = x.length;
-		GeneralPath path = new GeneralPath();
-		path.moveTo((float) StdDraw.scaleX(x[0]), (float) StdDraw.scaleY(y[0]));
+		Path2D.Double path = new Path2D.Double();
+		path.moveTo(StdDraw.scaleX(x[0]), StdDraw.scaleY(y[0]));
 		for (int i = 0; i < N; i++)
-			path.lineTo((float) StdDraw.scaleX(x[i]), (float) StdDraw.scaleY(y[i]));
+			path.lineTo(StdDraw.scaleX(x[i]), StdDraw.scaleY(y[i]));
 		path.closePath();
 		return path;
 	}

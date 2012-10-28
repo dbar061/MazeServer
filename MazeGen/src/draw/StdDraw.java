@@ -6,7 +6,7 @@ package draw;
  * @Date:				???
  * @ModifiedBy:			Devin Barry
  * @ModificationDate:	09.10.2012
- * @LastModified:		22.10.2012
+ * @LastModified:		28.10.2012
  * 
  * Shape drawing methods in the library have been substantially modified by
  * Devin. At a certain point the methods became clumsy inside this massive
@@ -17,16 +17,22 @@ package draw;
  * The modifications allow the drawing of several new shapes and add
  * additional method signatures for old shapes too.
  * 
- * Devins major modifications to this library include adding all the methods
+ * Devin's major modifications to this library include adding all the methods
  * that draw shapes or text using using Point2D.Double rather than a set of
  * x and y co-ordinates.
  * 
- * Adding the filledDiamond method
+ * Added the diamond and filledDiamond methods
+ * 
+ * Added the triangle and filledTriangle methods
  * 
  * Adding the angledRectangle and two filledAngledRectangle methods using
  * the AffineTransform.
  * 
- * Additional comments and formatting
+ * Changed the polygon method from using the legacy GeneralPath class to
+ * using the newer Path2D.Double class, which implements the Shape interface.
+ * 
+ * Additional comments and formatting. Changing of spelling to New Zealand
+ * English. ie centre and centred
  * 
  * ************************************************************************
  * 
@@ -597,8 +603,8 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw an ellipse with given semimajor and semiminor axes, centered on (x,
-	 * y).
+	 * Draw a filled ellipse with given semimajor and semiminor axes,
+	 * centred on (x, y).
 	 * 
 	 * @param x
 	 *            the x-coordinate of the center of the ellipse
@@ -662,12 +668,12 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw a filled square of side length 2r, centered on (x, y).
+	 * Draw a filled square of side length 2r, centred on (x, y).
 	 * 
 	 * @param x
-	 *            the x-coordinate of the center of the square
+	 *            the x-coordinate of the centre of the square
 	 * @param y
-	 *            the y-coordinate of the center of the square
+	 *            the y-coordinate of the centre of the square
 	 * @param r
 	 *            radius is half the length of any side of the square
 	 * @throws RuntimeException
@@ -679,10 +685,10 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw a filled square of side length 2r, centered at <location>.
+	 * Draw a filled square of side length 2r, centred at <location>.
 	 * 
 	 * @param location
-	 *            the Point at the center of the square
+	 *            the Point at the centre of the square
 	 * @param r
 	 *            radius is half the length of any side of the square
 	 * @throws RuntimeException
@@ -691,25 +697,85 @@ public final class StdDraw implements ActionListener, MouseListener,
 	public static void filledSquare(Point2D.Double location, double r) {
 		filledSquare(location.getX(), location.getY(), r);
 	}
+	
+	/**
+	 * Draw a diamond of side length 2r, centred on (x, y).
+	 * 
+	* @param x
+	 *            the x-coordinate of the centre of the diamond
+	 * @param y
+	 *            the y-coordinate of the centre of the diamond
+	 * @param r
+	 *            radius is half the length of any side of the diamond
+	 * @throws RuntimeException
+	 *             if r is negative
+	 */
+	public static void diamond(double x, double y, double r) {
+		offscreen.draw(ShapeAssist.diamond(x,y,r));
+		draw();
+	}
+	
+	/**
+	 * Draw a filled diamond of side length 2r, centred on (x, y).
+	 * 
+	* @param x
+	 *            the x-coordinate of the centre of the diamond
+	 * @param y
+	 *            the y-coordinate of the centre of the diamond
+	 * @param r
+	 *            radius is half the length of any side of the diamond
+	 * @throws RuntimeException
+	 *             if r is negative
+	 */
+	public static void filledDiamond(double x, double y, double r) {
+		offscreen.fill(ShapeAssist.diamond(x,y,r));
+		draw();
+	}
 
 	/**
-	 * Draw a filled diamond of side length 2r, centered at <location>.
+	 * Draw a filled diamond of side length 2r, centred at <location>.
 	 * 
 	 * @param location
-	 *            the Point at the center of the square
+	 *            the Point at the centre of the square
 	 * @param r
 	 *            radius is half the length of any side of the diamond
 	 * @throws RuntimeException
 	 *             if r is negative
 	 */
 	public static void filledDiamond(Point2D.Double location, double r) {
-		if (r < 0)
-			throw new RuntimeException("diamond side length can't be negative");
-		double cx = location.getX();
-		double cy = location.getY();
-		double[] x = { cx - r, cx, cx + r, cx };
-		double[] y = { cy, cy + r, cy, cy - r };
-		StdDraw.filledPolygon(x, y);
+		filledDiamond(location.getX(), location.getY(), r);
+	}
+	
+	/**
+	 * Draw an equilateral triangle of radius r, centred at <location>.
+	 * 
+	 * @param location
+	 *            the Point at the centre of the triangle
+	 * @param r
+	 *            radius is the length from the centre of the triangle to
+	 *            any of its corners.
+	 * @throws RuntimeException
+	 *             if r is negative
+	 */
+	public static void triangle(double x, double y, double r) {
+		offscreen.draw(ShapeAssist.triangle(x,y,r));
+		draw();
+	}
+	
+	/**
+	 * Draw a filled equilateral triangle of radius r, centred at <location>.
+	 * 
+	 * @param location
+	 *            the Point at the centre of the triangle
+	 * @param r
+	 *            radius is the length from the centre of the triangle to
+	 *            any of its corners.
+	 * @throws RuntimeException
+	 *             if r is negative
+	 */
+	public static void filledTriangle(double x, double y, double r) {
+		offscreen.fill(ShapeAssist.triangle(x,y,r));
+		draw();
 	}
 
 	/**
@@ -734,13 +800,13 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw a filled rectangle of given half width and half height, centered on
+	 * Draw a filled rectangle of given half width and half height, centred on
 	 * (x, y).
 	 * 
 	 * @param x
-	 *            the x-coordinate of the center of the rectangle
+	 *            the x-coordinate of the centre of the rectangle
 	 * @param y
-	 *            the y-coordinate of the center of the rectangle
+	 *            the y-coordinate of the centre of the rectangle
 	 * @param halfWidth
 	 *            is half the width of the rectangle
 	 * @param halfHeight
@@ -756,11 +822,11 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw a filled rectangle of given half width and half height, centered at
+	 * Draw a filled rectangle of given half width and half height, centred at
 	 * <location>.
 	 * 
 	 * @param location
-	 *            the Point at the center of the rectangle
+	 *            the Point at the centre of the rectangle
 	 * @param halfWidth
 	 *            is half the width of the rectangle
 	 * @param halfHeight
@@ -1425,20 +1491,35 @@ public final class StdDraw implements ActionListener, MouseListener,
 	 * Test client.
 	 */
 	public static void main(String[] args) {
+		//final int WINDOW_LENGTH = 600;
+		//final int WINDOW_HEIGHT = 1200;
+		//StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH); //pixel size of window
+		StdDraw.setXscale(0, 1.2);
+		StdDraw.setYscale(0, 1.2);
+		
+		
 		StdDraw.square(.2, .8, .1);
 		StdDraw.filledSquare(.8, .8, .2);
 		StdDraw.circle(.8, .2, .2);
 		
-		// draw a blue diamond
-		StdDraw.setPenRadius();
+		//draw a blue diamond, radius 0.1 (old method)
+		StdDraw.setPenRadius(); //default radius
 		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
 		double[] x = { .1, .2, .3, .2 };
 		double[] y = { .2, .3, .2, .1 };
 		StdDraw.filledPolygon(x, y);
 		
-		//Black filled rectangle, rotated x degrees
-		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.filledAngledRectangle(.4, .8, .05, .2, 90);
+		//draw a cyandiamond, radius 0.1 (new method)
+		StdDraw.setPenColor(StdDraw.CYAN);
+		StdDraw.filledDiamond(.45, .2, 0.1);
+		
+		//draw a magenta triangle, radius 0.1
+		StdDraw.setPenColor(StdDraw.MAGENTA);
+		StdDraw.filledTriangle(.45, 0.4, 0.1);
+		
+		//Green filled rectangle, rotated x degrees
+		StdDraw.setPenColor(StdDraw.GREEN);
+		StdDraw.filledAngledRectangle(.45, .8, .05, .2, 10);
 		//StdDraw.filledAngledRectangle(0.2, 0.2, 0.2, 0.05, 90);
 		//StdDraw.filledAngledRectangle(0, 0, 0.2, 0.05, 0);
 
