@@ -1,0 +1,85 @@
+package maze;
+import java.awt.Point;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+public class QueryResponder extends Thread {
+	private final int QUERY_PORT = 9001;
+	private final int RESPONSE_PORT_BASE = 10002;
+	private Maze maze;
+
+	public QueryResponder(Maze maze) {
+		this.maze = maze;
+	}
+
+	public void run() {
+		while (true) {
+			try {
+				// Listen for query
+				DatagramSocket serverSocket = new DatagramSocket(null);
+				serverSocket.setReuseAddress(true); // Allow multiple receivers
+													// on this port
+				serverSocket.bind(new InetSocketAddress("0.0.0.0", QUERY_PORT));
+
+				byte[] receiveData = new byte[1024];
+
+				DatagramPacket receivePacket = new DatagramPacket(receiveData,
+						receiveData.length);
+				serverSocket.receive(receivePacket);
+				String query = new String(receivePacket.getData());
+				query = query.replace((char)0, ' ');	// replace nulls with spaces
+				query = query.trim();
+				System.out.println("RECEIVED: " + query);
+
+				respondToQuery(query);
+
+				serverSocket.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	private void respondToQuery(String query) throws IOException {
+		String[] tokens = query.split(",");
+		int robotId = Integer.parseInt(tokens[0]);
+		if (tokens[1].equals("obstacle")) {
+			String direction = tokens[2];
+			int x = Integer.parseInt(tokens[3]);
+			int y = Integer.parseInt(tokens[4]);
+			String response = "e";
+			
+			if(maze.getWall(direction, x, y)) {
+				response = "w";
+			}
+
+			InetAddress sendingAddress = InetAddress.getByName("localhost");
+
+			byte[] sendData = new byte[1];
+
+			DatagramSocket clientSocket = new DatagramSocket();
+
+			sendData[0] = (byte)response.charAt(0);
+
+			System.out.println("Sending: " + (int) (sendData[0]));
+			
+			int responsePort = RESPONSE_PORT_BASE + 1000 * (robotId - 1);
+
+			DatagramPacket sendPacket = new DatagramPacket(sendData,
+					sendData.length, sendingAddress, responsePort);
+			clientSocket.send(sendPacket);
+
+			clientSocket.close();
+		} else {
+			System.out.println("Invalid query: " + query);
+		}
+	}
+
+}
