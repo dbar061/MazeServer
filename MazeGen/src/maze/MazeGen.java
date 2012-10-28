@@ -2,6 +2,7 @@ package maze;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import draw.StdDraw;
 
 /*************************************************************************
  * 
@@ -124,7 +125,7 @@ public class MazeGen {
 		MazeGen maze = new MazeGen(N);
 		StdDraw.show(0);
 		//maze.draw();
-		maze.solve(false);
+		maze.solve(true);
 		UDPServer udps = new UDPServer();
 		try {
 			udps.startServer(m);

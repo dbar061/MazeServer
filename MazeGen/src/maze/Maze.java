@@ -2,6 +2,7 @@ package maze;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import draw.StdDraw;
 
 /*************************************************************************
  * 
@@ -87,7 +88,7 @@ public class Maze {
 			visited[0][y] = true;
 			visited[size + 1][y] = true;
 		}
-		//Should be have already visited the square?
+		//Should be have already visited the centre square?
 		//possibly put the square in the middle here as visited
 	}
 	
