@@ -380,20 +380,24 @@ public class Maze implements Serializable {
 	 */
 	public boolean getWall(String direction, int x, int y) {
 		if (x < size && x >= 0 && y < size && y >= 0) {
-		if (direction.equalsIgnoreCase("north")) {
-			return north[x][y];
+			if (direction.equalsIgnoreCase("north")) {
+				return north[x][y];
+			}
+			if (direction.equalsIgnoreCase("south")) {
+				return south[x][y];
+			}
+			if (direction.equalsIgnoreCase("east")) {
+				return east[x][y];
+			}
+			if (direction.equalsIgnoreCase("west")) {
+				return west[x][y];
+			}
+			System.out.println("Error with getWall - invalid direction!");
 		}
-		if (direction.equalsIgnoreCase("south")) {
-			return south[x][y];
-		}
-		if (direction.equalsIgnoreCase("east")) {
-			return east[x][y];
-		}
-		if (direction.equalsIgnoreCase("west")) {
-			return west[x][y];
+		else {
+			System.out.println("Error with getWall - index out of bounds!");
 		}
 		return false;
-	}
 	}
 	
 	/**
@@ -406,8 +410,14 @@ public class Maze implements Serializable {
 	 * @return
 	 */
 	public boolean getSensor(int x, int y) {
-		boolean sensor[][] = ms.getMotionSensors();
-		return sensor[x][y];
+		if (x < size && x >= 0 && y < size && y >= 0) {
+			boolean sensor[][] = ms.getMotionSensors();
+			return sensor[x][y];
+		}
+		else {
+			System.out.println("Error with getSensor - index out of bounds!");
+		}
+		return false;
 	}
 	
 	
