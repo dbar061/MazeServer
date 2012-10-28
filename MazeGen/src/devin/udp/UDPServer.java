@@ -13,9 +13,11 @@ public class UDPServer {
 	
 	public void startServer(Maze m) throws Exception {
 		DatagramSocket serverSocket = new DatagramSocket(10001);
-		byte[] receiveData = new byte[1024];
-		byte[] sendData = new byte[1024];
+		byte[] receiveData;
+		byte[] sendData;
 		for (int i = 0; i < 5; i++) {
+			sendData = new byte[1024];
+			receiveData = new byte[1024];
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			serverSocket.receive(receivePacket);
 			String sentence = new String( receivePacket.getData());
