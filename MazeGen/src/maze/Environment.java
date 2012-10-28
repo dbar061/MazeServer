@@ -1,7 +1,6 @@
 package maze;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import draw.StdDraw;
 
 
@@ -9,7 +8,7 @@ import draw.StdDraw;
  * 
  * @Author:			Devin Barry
  * @Date:			09.10.2012
- * @LastModified:	24.10.2012
+ * @LastModified:	28.10.2012
  * 
  * This code is based on maze gen code from an unspecified author.
  * Original code is available from introcs.cs.princeton.edu

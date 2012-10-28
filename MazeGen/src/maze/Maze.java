@@ -6,11 +6,14 @@ import java.io.Serializable;
 import draw.StdDraw;
 
 /*************************************************************************
+ * Maze.java
  * 
- * @Author: Devin Barry
- * @Date: 23.10.2012
- * @LastModified: 24.10.2012
+ * @Author:			Devin Barry
+ * @Date:			23.10.2012
+ * @LastModified: 	28.10.2012
  * 
+ * The maze class contains the data structures and methods for generating
+ * and solving a maze.
  *************************************************************************/
 public class Maze implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,9 +37,11 @@ public class Maze implements Serializable {
 
 	private static final int SOLVER_SPEED = 30; // lower is faster
 
-	// This is the coodinates of the centre.
-	Point2D.Double centrePoint;
-	int centreSize;
+	// centrePoint is the location of the centre of the maze
+	private Point2D.Double centrePoint;
+	private int centreSize; //the size of square at the centre
+	//the start and end points for the centre square
+	private int centreMin, centreMax;
 	
 	MotionSensors ms;
 	
@@ -58,11 +63,14 @@ public class Maze implements Serializable {
 		south = new boolean[size + 2][size + 2];
 		west = new boolean[size + 2][size + 2];
 		
-		ms = new MotionSensors(size, 15); //create 15 motion sensors
-		System.out.println(ms);
-
 		init();
-		generate();
+		calculateCentre();
+		
+		 //create 15 motion sensors, but don't create any in the centre
+		ms = new MotionSensors(size, 15, centreMin, centreMax);
+		//System.out.println(ms); //print motion sensor coordinates
+		
+		createSubmarineMaze();//generates maze for the submarine
 	}
 
 	public boolean[][] getNorth() {
@@ -107,6 +115,35 @@ public class Maze implements Serializable {
 		// Should be have already visited the centre square?
 		// possibly put the square in the middle here as visited
 	}
+	
+	/**
+	 * Performs calculations to find the centre point of the maze
+	 * and to calculate how big the square in the middle should be.
+	 * This square is always one fifth of the width/height of the
+	 * maze.
+	 */
+	private void calculateCentre() {
+		// The size of the centre is presently one 5th of the maze size
+		centreSize = size / 5;
+		// System.out.println("centreSize is: " + centreSize);
+
+		// Min and max are the start points of the centre
+		int min = (int) Math.ceil((centreSize * 2.0));
+		int max = min + centreSize;
+		min++; // this adjusts for the border
+		max++;
+		// System.out.println("min is: " + min);
+		// System.out.println("max is: " + max);
+
+		// centre is the centre point of the maze
+		double centre = (centreSize / 2.0) + min;
+		// System.out.println("centre is: " + centre);
+		centrePoint = new Point2D.Double(centre, centre);
+		
+		//set the min and max points for the centre
+		centreMin = min;
+		centreMax = max;
+	}
 
 	private void init() {
 		this.initSolver();
@@ -120,8 +157,54 @@ public class Maze implements Serializable {
 			}
 		}
 	}
+	
+	/**
+	 * The maze used on the submarine has a block in the
+	 * centre which contains no maze. This method creates
+	 * a full maze throughout the window and then cuts a
+	 * square out of the centre.
+	 * 
+	 * The maze generation algorithm starts to generate
+	 * the maze from the lower left corner.
+	 */
+	private void createSubmarineMaze() {
+		generate(1, 1); // generate the maze
 
-	// generate the maze
+		// delete centre
+		for (int i = centreMin; i < centreMax; i++) {
+			for (int j = centreMin; j < centreMax; j++) {
+				//walls exist from both sides, ensure that both sides are drawn
+				if (j != centreMax-1) north[i][j] = false;
+				if (j != centreMin) south[i][j] = false;
+			}
+		}
+		for (int i = centreMin; i < centreMax; i++) {
+			for (int j = centreMin; j < centreMax; j++) {
+				if (i != centreMax-1) east[i][j] = false;
+				if (i != centreMin) west[i][j] = false;
+			}
+		}
+	
+		/*
+		 * draw centre
+		 * 
+		 * // delete some random walls for (int i = 0; i < N * 100; i++) { int x
+		 * = (int) (1 + Math.random() * (N - 1)); int y = (int) (1 +
+		 * Math.random() * (N - 1)); north[x][y] = south[x][y + 1] = false; }
+		 * 
+		 * // add some random walls for (int i = 0; i < N * 1; i++) { int x =
+		 * (int) (N / 2 + Math.random() * (N / 2)); int y = (int) (N / 2 +
+		 * Math.random() * (N / 2)); east[x][y] = west[x + 1][y] = true; }
+		 */
+	}
+
+	
+	/**
+	 * Recursive algorithm for generating the maze
+	 * Calls itself until all squares have been visited
+	 * @param x
+	 * @param y
+	 */
 	private void generate(int x, int y) {
 		visited[x][y] = true;
 
@@ -150,55 +233,6 @@ public class Maze implements Serializable {
 				}
 			}
 		}
-	}
-
-	// generate the maze starting from lower left
-	private void generate() {
-		// The size of the centre is presently one 5th of the maze size
-		centreSize = size / 5;
-		// System.out.println("centreSize is: " + centreSize);
-
-		// Min and max are the start points of the centre
-		int min = (int) Math.ceil((centreSize * 2.0));
-		int max = min + centreSize;
-		min++; // this adjusts for the border
-		max++;
-		// System.out.println("min is: " + min);
-		// System.out.println("max is: " + max);
-
-		// centre is the centre point of the maze
-		double centre = (centreSize / 2.0) + min;
-		// System.out.println("centre is: " + centre);
-		centrePoint = new Point2D.Double(centre, centre);
-
-		generate(1, 1); // generate the maze
-
-		// delete centre
-		for (int i = min; i < max; i++) {
-			for (int j = min; j < max; j++) {
-				//walls exist from both sides, ensure that both sides are drawn
-				if (j != max-1) north[i][j] = false;
-				if (j != min) south[i][j] = false;
-			}
-		}
-		for (int i = min; i < max; i++) {
-			for (int j = min; j < max; j++) {
-				if (i != max-1) east[i][j] = false;
-				if (i != min) west[i][j] = false;
-			}
-		}
-		/*
-		 * draw centre
-		 * 
-		 * // delete some random walls for (int i = 0; i < N * 100; i++) { int x
-		 * = (int) (1 + Math.random() * (N - 1)); int y = (int) (1 +
-		 * Math.random() * (N - 1)); north[x][y] = south[x][y + 1] = false; }
-		 * 
-		 * // add some random walls for (int i = 0; i < N * 1; i++) { int x =
-		 * (int) (N / 2 + Math.random() * (N / 2)); int y = (int) (N / 2 +
-		 * Math.random() * (N / 2)); east[x][y] = west[x + 1][y] = true; }
-		 */
-
 	}
 
 	// display the maze in turtle graphics
