@@ -87,7 +87,9 @@ public class Environment {
 	public static void main(String[] args) {
 		Environment enviroment = new Environment();
 		StdDraw.show(0);
-		enviroment.solve(true);
+		maze.draw();
+		StdDraw.show(200);
+		enviroment.solve(false);
 		//no need for explicit animation calls
 		//animation is dealt with internally inside StdDraw
 	}

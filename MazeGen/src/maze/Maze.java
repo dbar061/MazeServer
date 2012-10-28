@@ -14,6 +14,9 @@ import draw.StdDraw;
  *************************************************************************/
 public class Maze implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	//This the size of the maze. The maze is always square
+	public int size;
 
 	// These are the data structures for the maze
 	// Each two dimensional array is the size of the maze + 2
@@ -23,20 +26,28 @@ public class Maze implements Serializable {
 	private boolean[][] west;
 
 	// These are only used during generation and solving
-	private boolean[][] visited; // this is used for generation algorithm and
-									// for the solving algorithm
+	// this is used for generation algorithm and for the solving algorithm
+	private boolean[][] visited;
+	
 	private boolean foundTarget;
 	private Point target;
-
-	// These contain the size and end coordinates of the maze
-	public int size;
 
 	private static final int SOLVER_SPEED = 30; // lower is faster
 
 	// This is the coodinates of the centre.
 	Point2D.Double centrePoint;
 	int centreSize;
+	
+	MotionSensors ms;
+	
+	
 
+	/**
+	 * The constructor for Maze only takes the size
+	 * of the maze.
+	 * 
+	 * @param size
+	 */
 	public Maze(int size) {
 		this.size = size;
 		target = new Point(size, 1);
@@ -46,6 +57,9 @@ public class Maze implements Serializable {
 		east = new boolean[size + 2][size + 2];
 		south = new boolean[size + 2][size + 2];
 		west = new boolean[size + 2][size + 2];
+		
+		ms = new MotionSensors(size, 15); //create 15 motion sensors
+		System.out.println(ms);
 
 		init();
 		generate();
@@ -72,7 +86,7 @@ public class Maze implements Serializable {
 	}
 
 	public Point2D.Double GetCentrePoint() {
-		// dont allow external sources to modify this Point
+		// don't allow external sources to modify this Point
 		return new Point2D.Double(centrePoint.getX(), centrePoint.getY());
 	}
 
@@ -202,10 +216,12 @@ public class Maze implements Serializable {
 		boolean north[][] = getNorth();
 		boolean east[][] = getEast();
 		boolean west[][] = getWest();
+		boolean sensor[][] = ms.getMotionSensors();
 
-		StdDraw.setPenColor(StdDraw.BLACK);
+		//Draw the maze and motion sensors
 		for (int x = 1; x <= size; x++) {
 			for (int y = 1; y <= size; y++) {
+				StdDraw.setPenColor(StdDraw.BLACK);
 				if (south[x][y]) {
 					StdDraw.line(x, y, x + 1, y);
 				}
@@ -217,6 +233,10 @@ public class Maze implements Serializable {
 				}
 				if (east[x][y]) {
 					StdDraw.line(x + 1, y, x + 1, y + 1);
+				}
+				if (sensor[x][y]) {
+					StdDraw.setPenColor(StdDraw.MAGENTA);
+					StdDraw.filledTriangle(x + 0.5, y + 0.4, 0.5);
 				}
 			}
 		}
