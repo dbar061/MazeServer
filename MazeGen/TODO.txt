@@ -1,0 +1,30 @@
+Add switch drawing to the maze
+
+Add switch check protocol to the QueryResponder
+
+build Robot server
+
+design robot server protocol
+
+change keys for driving robots so that multiple robots
+can be driven from a single computer
+
+improve protocol to prevent robots jumping through walls
+
+
+environ (or controller) can make robot change colour when
+ontop of a motion sensor. (maybe robot could flash)
+This will provide a purely local visual cue as to this 
+trigger.
+
+
+Upgrade GUI to have a time count down setting
+
+Build a protocol for sending time information to GUI
+
+
+possibly do some research into server failover data
+present data on redundant server stuff during presentation
+
+Add a "difficulty level" popup window to the Environ
+Have a NIGHTMARE setting
