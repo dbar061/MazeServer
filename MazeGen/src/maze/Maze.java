@@ -8,7 +8,7 @@ import draw.StdDraw;
  * 
  * @Author: Devin Barry
  * @Date: 23.10.2012
- * @LastModified: 24.10.2012
+ * @LastModified: 28.10.2012
  * 
  *************************************************************************/
 public class Maze {
