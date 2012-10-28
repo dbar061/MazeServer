@@ -16,8 +16,13 @@ import draw.StdDraw;
  * and solving a maze.
  *************************************************************************/
 public class Maze implements Serializable {
-	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Randomly generated serialVersionUID. Used during serialisation
+	 * of this class.
+	 */
+	private static final long serialVersionUID = 242017991465217780L;
+
 	//This the size of the maze. The maze is always square
 	public int size;
 

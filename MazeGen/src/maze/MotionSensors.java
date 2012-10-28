@@ -3,6 +3,7 @@ package maze;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.Serializable;
 
 
 /*************************************************************************
@@ -16,8 +17,14 @@ import java.util.Set;
  * creating motion sensors. It is very closely related to Maze.java and
  * is designed to create motion sensors in the maze.
  *************************************************************************/
-public class MotionSensors {
+public class MotionSensors implements Serializable {
 	
+	/**
+	 * Randomly generated serialVersionUID. Used during serialisation
+	 * of this class.
+	 */
+	private static final long serialVersionUID = 2628910297122417116L;
+
 	//motion sensors are stored in this array
 	private boolean[][] motionSensors;
 	
