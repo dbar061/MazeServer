@@ -162,14 +162,15 @@ public class Maze implements Serializable {
 		// delete centre
 		for (int i = min; i < max; i++) {
 			for (int j = min; j < max; j++) {
-				north[i][j] = false;
-				south[i][j] = false;
+				//walls exist from both sides, ensure that both sides are drawn
+				if (j != max-1) north[i][j] = false;
+				if (j != min) south[i][j] = false;
 			}
 		}
 		for (int i = min; i < max; i++) {
 			for (int j = min; j < max; j++) {
-				east[i][j] = false;
-				west[i][j] = false;
+				if (i != max-1) east[i][j] = false;
+				if (i != min) west[i][j] = false;
 			}
 		}
 		/*

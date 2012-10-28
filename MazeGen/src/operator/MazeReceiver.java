@@ -1,14 +1,8 @@
 package operator;
 
-
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ConnectException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 import maze.Maze;

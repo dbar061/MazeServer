@@ -24,7 +24,7 @@ import draw.StdDraw;
  *************************************************************************/
 
 public class Environment {
-	private final int MAZE_SIZE = 30; // Should be a multiple of 10 for best performance
+	private final int MAZE_SIZE = 20; // Should be a multiple of 10 for best performance
 	private static Maze maze;
 
 	public static final int WINDOW_LENGTH = 600;
@@ -83,7 +83,7 @@ public class Environment {
 	public static void main(String[] args) {
 		Environment enviroment = new Environment();
 		StdDraw.show(0);
-		enviroment.solve(false);
+		enviroment.solve(true);
 		
 
 
