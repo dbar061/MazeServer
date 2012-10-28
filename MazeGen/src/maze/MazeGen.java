@@ -2,6 +2,8 @@ package maze;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+
+import devin.udp.UDPServer;
 import draw.StdDraw;
 
 /*************************************************************************

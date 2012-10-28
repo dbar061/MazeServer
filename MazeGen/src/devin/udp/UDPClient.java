@@ -1,4 +1,4 @@
-package maze;
+package devin.udp;
 
 import java.io.*;
 import java.net.*;

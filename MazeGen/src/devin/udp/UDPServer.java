@@ -1,7 +1,9 @@
-package maze;
+package devin.udp;
 
 import java.net.*;
 import java.util.StringTokenizer;
+
+import maze.Maze;
 
 public class UDPServer {
 	
