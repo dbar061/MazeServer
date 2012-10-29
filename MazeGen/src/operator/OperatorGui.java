@@ -55,18 +55,6 @@ public class OperatorGui {
 		StdDraw.setXscale(0, maze.size + 2);
 		StdDraw.setYscale(0, maze.size + 2);
 		
-		//add some stuff
-		//JButton b1 = new JButton("Oh hai");
-		//JButton b2 = new JButton("Hello");
-		//JButton b3 = new JButton("Hows it going");
-		//JPanel buttonPanel = new JPanel(); // use FlowLayout
-		//buttonPanel.add(b1);
-		//buttonPanel.add(b2);
-		//buttonPanel.add(b3);
-		//guiJFrame.add(buttonPanel);
-		
-		//draw(); //draw the frame before continuing
-		
 		//Start a new thread for WACR
 		int port = 10003 + (robotId - 1) * 1000;
 		wacr = new WarningAndCounterReceiver(port, sq);
@@ -160,20 +148,17 @@ public class OperatorGui {
 	
 	private void drawCounters() {
 		// Draw the 10min & 3s counter
-		StdDraw.setPenColor(StdDraw.BLACK);
-		// Draw the 10min & 3s counter
-		StdDraw.setPenColor(StdDraw.BLACK);
 		
-		if(tenMinuteTimerValue<600) 
-		{StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinuteTimerValue));}
-		else
-		{
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(0));
+		if (tenMinuteTimerValue > 0) {
+			StdDraw.setPenColor(StdDraw.BLACK);
 		}
+		else {
+			StdDraw.setPenColor(StdDraw.RED);
+		}
+		StdDraw.textLeft(1,-0.5, "Seconds left:" + String.valueOf(tenMinuteTimerValue));
 		
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.textLeft(6,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));
+		StdDraw.textLeft(16,-0.5, "Switch Timer:" + String.valueOf(threeSecTimerValue));
 	}
 
 	
