@@ -64,49 +64,27 @@ public class OperatorGui {
 		}
 	}
 	
-	
-	
-	
-
+	/**
+	 * Fetch data from the servers
+	 */
 	private void update() {
 		//update robot positions
 		for (int i = 0; i < 4; i++) {
 			robotPositions[i] = robotPositionReceivers[i].getRobotPosition();
 		}
 		
-		int missionFailed;
-		//int tenMinuteTimerValue;
-		//int threeSecTimerValue;
-		int twoMinWarning;
-		int threeSecTimerWarning;
+		//fetch the counter data and warnings from the server queue
+		if (sq.get() == 1) missionFailed = true;
+		else missionFailed = false;
 		
-		missionFailed = sq.get();
 		tenMinuteTimerValue = sq.get();
 		threeSecTimerValue = sq.get();
-		twoMinWarning = sq.get();
-		threeSecTimerWarning = sq.get();
-
-		if (twoMinWarning == 1) {
-			this.twoMinWarning = true;
-		}
-		else {
-			this.twoMinWarning = false;
-		}
 		
-
-		if (threeSecTimerWarning == 1) {
-			this.threeSecTimerWarning = true;
-		}
-		else {
-			this.threeSecTimerWarning = false;
-		}
+		if (sq.get() == 1) twoMinWarning = true;
+		else twoMinWarning = false;
 		
-		if (missionFailed == 1) {
-			this.missionFailed = true;
-		}
-		else {
-			this.missionFailed = false;
-		}
+		if (sq.get() == 1) threeSecTimerWarning = true;
+		else threeSecTimerWarning = false;
 	}
 	
 	
