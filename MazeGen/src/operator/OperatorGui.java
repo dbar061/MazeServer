@@ -3,8 +3,6 @@ package operator;
 
 import java.awt.Point;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
 
 import maze.Maze;
 import draw.StdDraw;
@@ -58,16 +56,16 @@ public class OperatorGui {
 		StdDraw.setYscale(0, maze.size + 2);
 		
 		//add some stuff
-		JButton b1 = new JButton("Oh hai");
-		JButton b2 = new JButton("Hello");
-		JButton b3 = new JButton("Hows it going");
-		JPanel buttonPanel = new JPanel(); // use FlowLayout
-		buttonPanel.add(b1);
-		buttonPanel.add(b2);
-		buttonPanel.add(b3);
-		guiJFrame.add(buttonPanel);
+		//JButton b1 = new JButton("Oh hai");
+		//JButton b2 = new JButton("Hello");
+		//JButton b3 = new JButton("Hows it going");
+		//JPanel buttonPanel = new JPanel(); // use FlowLayout
+		//buttonPanel.add(b1);
+		//buttonPanel.add(b2);
+		//buttonPanel.add(b3);
+		//guiJFrame.add(buttonPanel);
 		
-		draw(); //draw the frame before continuing
+		//draw(); //draw the frame before continuing
 		
 		//Start a new thread for WACR
 		int port = 10003 + (robotId - 1) * 1000;
@@ -163,7 +161,7 @@ public class OperatorGui {
 	private void drawCounters() {
 		// Draw the 10min & 3s counter
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinuteTimerValue));
+		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(tenMinuteTimerValue));
 		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));	
 	}
 
