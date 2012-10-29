@@ -94,10 +94,10 @@ public class QueryResponder extends Thread {
 		else if (sq.getQuery().equals("sensor")) {
 			response = sq.getQuery() + ",";//send back the original query string
 			if (maze.getSensor(sq.getX(), sq.getY())) {
-				response += "true";
+				response += "true,";
 			}
 			else {
-				response += "false";
+				response += "false,";
 			}
 			response += sq.getX() + ",";
 			response += sq.getY() + "\0"; //C needs a null at the end of the string
