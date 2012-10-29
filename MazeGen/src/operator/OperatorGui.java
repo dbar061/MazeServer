@@ -5,6 +5,7 @@ import java.awt.Point;
 
 import maze.Maze;
 import draw.StdDraw;
+import controller.ServerQueue;
 
 public class OperatorGui {
 	public static final int WINDOW_LENGTH = 600;
@@ -12,20 +13,24 @@ public class OperatorGui {
 	
 	private Point robotPositions[] = new Point[4];
 	
-	private int tenMinTimerValue = 600;
+	private int tenMinuteTimerValue = 600;
 	private int threeSecTimerValue = 3;
 	
 	private boolean missionFailed = false;
 	private boolean twoMinWarning = false;
 	private boolean threeSecTimerWarning = false;
 	
-	KeySender keySender;
-	MazeReceiver mazeReceiver;
-	RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
-	private WarningAndCounterReceiver wacr  = new WarningAndCounterReceiver(10997);
-	Maze maze = null;
+	private KeySender keySender;
+	private MazeReceiver mazeReceiver;
+	private RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
+	private WarningAndCounterReceiver wacr;
+	private Maze maze = null;
+	
+	private ServerQueue<Integer> sq;
 	
 	public OperatorGui(int robotId) {
+		sq = new ServerQueue<Integer>();
+		
 		StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH);
 		
 		int keySenderPort = 10000 + 1000 * (robotId - 1);
@@ -38,7 +43,10 @@ public class OperatorGui {
 		mazeReceiver = new MazeReceiver();
 		mazeReceiver.start();
 		
+		int port = 10003 + (robotId - 1) * 1000;
+		wacr = new WarningAndCounterReceiver(port, sq);
 		wacr.start();
+	
 
 		for (int i = 0; i < 4; i++) {
 			int portNumber = 10001 + (i * 1000);
@@ -65,14 +73,17 @@ public class OperatorGui {
 		//Draw the warnings
 		StdDraw.setPenColor(StdDraw.BLACK);
 
-		if(missionFailed)
-		{StdDraw.text(18,0.5, "Mission Fialed!");}
+		if (missionFailed) {
+			StdDraw.text(18,0.5, "Mission Fialed!");
+		}
 		
-		if(threeSecTimerWarning)
-		{StdDraw.textLeft(1,0.5, "Not all switches have been turned!");}
+		if (threeSecTimerWarning) {
+			StdDraw.textLeft(1,0.5, "Not all switches have been turned!");
+		}
 		
-		if(twoMinWarning)
-		{StdDraw.textLeft(10,-0.5, "Please get to the Switch zone!");}
+		if (twoMinWarning) {
+			StdDraw.textLeft(10,-0.5, "Please get to the Switch zone!");
+		}
 		
 	}
 
@@ -90,10 +101,9 @@ public class OperatorGui {
 	private void drawCounters() {
 		// Draw the 10min & 3s counter
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinTimerValue));
-		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));
-		
-		}
+		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinuteTimerValue));
+		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));	
+	}
 	
 	
 
@@ -103,30 +113,38 @@ public class OperatorGui {
 			robotPositions[i] = robotPositionReceivers[i].getRobotPosition();
 		}
 		
-		//update warnings & counters
-		tenMinTimerValue = wacr.tenMinuteTimerValue;
-		threeSecTimerValue = wacr.threeSecTimerValue;
+		int missionFailed;
+		//int tenMinuteTimerValue;
+		//int threeSecTimerValue;
+		int twoMinWarning;
+		int threeSecTimerWarning;
+		
+		missionFailed = sq.get();
+		tenMinuteTimerValue = sq.get();
+		threeSecTimerValue = sq.get();
+		twoMinWarning = sq.get();
+		threeSecTimerWarning = sq.get();
 
-		if (wacr.twoMinWarning == 1) {
-			twoMinWarning = true;
+		if (twoMinWarning == 1) {
+			this.twoMinWarning = true;
 		}
 		else {
-			twoMinWarning = false;
+			this.twoMinWarning = false;
 		}
 		
 
-		if (wacr.threeSecTimerWarning == 1) {
-			threeSecTimerWarning = true;
+		if (threeSecTimerWarning == 1) {
+			this.threeSecTimerWarning = true;
 		}
 		else {
-			threeSecTimerWarning = false;
+			this.threeSecTimerWarning = false;
 		}
 		
-		if (wacr.missionFailed == 1) {
-			missionFailed = true;
+		if (missionFailed == 1) {
+			this.missionFailed = true;
 		}
 		else {
-			missionFailed  =false;
+			this.missionFailed  =false;
 		}
 		
 		
