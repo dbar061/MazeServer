@@ -11,6 +11,8 @@ public class OperatorGui {
 	public static final int WINDOW_HEIGHT = WINDOW_LENGTH;
 	
 	private Point robotPositions[] = new Point[4];
+	int tenmintimervalue=600;
+	int threesectimervalue=3;
 	KeySender keySender;
 	MazeReceiver mazeReceiver;
 	RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
@@ -44,8 +46,19 @@ public class OperatorGui {
 		}
 		
 		drawRobots();
+		drawCounters();
+		drawWarnings();
 		
 		StdDraw.show(100);
+	}
+
+	private void drawWarnings() {
+		//Draw the warnings
+		StdDraw.setPenColor(StdDraw.BLACK);
+		//TODO: Add logic for connecting if 3s timer started
+		StdDraw.text(6,0.5, "Not all switches have been turned!");
+		//TODO: Add logic for connecting  2m warning timer
+		StdDraw.text(12,-0.5, "Please get to the Switch zone!");
 	}
 
 	private void drawRobots() {
@@ -58,6 +71,15 @@ public class OperatorGui {
 			}
 		}
 	}
+	
+	private void drawCounters() {
+		// Draw the 10min & 3s counter
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(0,-0.5, String.valueOf(tenmintimervalue));
+		StdDraw.text(3,-0.5, String.valueOf(threesectimervalue));
+		
+		}
+	
 	
 
 	private void update() {
