@@ -161,8 +161,19 @@ public class OperatorGui {
 	private void drawCounters() {
 		// Draw the 10min & 3s counter
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(tenMinuteTimerValue));
-		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));	
+		// Draw the 10min & 3s counter
+		StdDraw.setPenColor(StdDraw.BLACK);
+		
+		if(tenMinuteTimerValue<600) 
+		{StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinuteTimerValue));}
+		else
+		{
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(0));
+		}
+		
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.textLeft(6,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));
 	}
 
 	
