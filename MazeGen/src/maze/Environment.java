@@ -79,6 +79,10 @@ public class Environment {
 		
 		return (solved[0] && solved[1] && solved[2] && solved[3]);
 	}
+	
+	public boolean getValidMaze() {
+		return validMaze;
+	}
 
 	/**
 	 * Main method for the environment server.
@@ -87,9 +91,16 @@ public class Environment {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Environment enviroment = new Environment();
+		Environment environment = new Environment();
 		//no need for explicit animation calls
 		//animation is dealt with internally inside StdDraw
+		
+		if (!environment.getValidMaze()) {
+			throw new RuntimeException("Maze cannot be solved! Create it again!");
+		}
+		else {
+			System.out.println("All maze routes have been solved!");
+		}
 		
 		//Create the maze sender server
 		MazeSender mazeSender = new MazeSender(maze);
