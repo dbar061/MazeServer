@@ -15,15 +15,14 @@ public class OperatorGui {
 	private int tenmintimervalue=600;
 	private int threesectimervalue=3;
 	
-	//TODO:change these to false when blockide can broadcast these
-	private boolean missionFailed =true;
-	private boolean twominwarning  =true;
-	private boolean threesectimerwarning  =true;
+	private boolean missionFailed =false;
+	private boolean twominwarning  =false;
+	private boolean threesectimerwarning  =false;
 	
 	KeySender keySender;
 	MazeReceiver mazeReceiver;
 	RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
-	WarningAndCounterReceiver TheWarningAndCounterReceiver  = new WarningAndCounterReceiver(12001);
+	private WarningAndCounterReceiver TheWarningAndCounterReceiver  = new WarningAndCounterReceiver(10997);
 	Maze maze = null;
 	
 	public OperatorGui(int robotId) {
@@ -38,6 +37,8 @@ public class OperatorGui {
 		
 		mazeReceiver = new MazeReceiver();
 		mazeReceiver.start();
+		
+		TheWarningAndCounterReceiver.start();
 
 		for (int i = 0; i < 4; i++) {
 			int portNumber = 10001 + (i * 1000);
@@ -103,27 +104,24 @@ public class OperatorGui {
 		}
 		
 		//update warnings & counters
+		tenmintimervalue= TheWarningAndCounterReceiver.tenmintimervalue;
+		threesectimervalue=TheWarningAndCounterReceiver.threesectimervalue;
+
+		if(TheWarningAndCounterReceiver.twominwarning==1)
+		{twominwarning=true;}
+		else
+		{twominwarning=false;}
 		
-		//TODO:activate this when blockide can broadcast this
+
+		if(TheWarningAndCounterReceiver.threesectimerwarning==1)
+		{threesectimerwarning=true;}
+		else
+		{threesectimerwarning=false;}
 		
-//		tenmintimervalue= TheWarningAndCounterReceiver.tenmintimervalue;
-//		threesectimervalue=TheWarningAndCounterReceiver.threesectimervalue;
-//
-//		if(TheWarningAndCounterReceiver.twominwarning==1)
-//		{twominwarning=true;}
-//		else
-//		{twominwarning=false;}
-//		
-//
-//		if(TheWarningAndCounterReceiver.threesectimerwarning==1)
-//		{threesectimerwarning=true;}
-//		else
-//		{threesectimerwarning=false;}
-//		
-//		if(TheWarningAndCounterReceiver.missionFailed==1)
-//		{missionFailed=true;}
-//		else
-//		{missionFailed=false;}
+		if(TheWarningAndCounterReceiver.missionFailed==1)
+		{missionFailed=true;}
+		else
+		{missionFailed=false;}
 		
 		
 		if(maze == null && mazeReceiver.getMaze() != null) {
@@ -140,6 +138,7 @@ public class OperatorGui {
 		}
 		
 		OperatorGui operatorGui = new OperatorGui(robotId);
+		
 		
 		StdDraw.show(0);
 

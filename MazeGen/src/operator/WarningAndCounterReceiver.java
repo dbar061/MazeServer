@@ -6,17 +6,19 @@ import java.net.InetSocketAddress;
 
 public class WarningAndCounterReceiver extends Thread {
 
-	public WarningAndCounterReceiver(int port)
-	{
-		receivingPort = port;
-	}
-
 	private int receivingPort;
 	public int missionFailed ;
 	public int tenmintimervalue;
 	public int threesectimervalue ;
 	public int twominwarning ;
 	public int threesectimerwarning ;
+	
+	public WarningAndCounterReceiver(int port)
+	{
+		this.receivingPort = port;
+	}
+
+
 	
 	public void run() {
 		while (true) {
