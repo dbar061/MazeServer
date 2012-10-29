@@ -2,6 +2,9 @@ package operator;
 
 
 import java.awt.Point;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
 
 import maze.Maze;
 import draw.StdDraw;
@@ -37,12 +40,14 @@ public class OperatorGui {
 		
 		StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH);
 		
+		JFrame guiJFrame = StdDraw.getFrame();
+		
 		int keySenderPort = 10000 + 1000 * (robotId - 1);
 		keySender = new KeySender(keySenderPort);
-		StdDraw.getFrame().addKeyListener(keySender);
+		guiJFrame.addKeyListener(keySender);
 		keySender.start();
 		
-		StdDraw.getFrame().setTitle("Robot operator " + robotId + " GUI");
+		guiJFrame.setTitle("Robot operator " + robotId + " GUI");
 		
 		//Start a new thread for Maze Receiver
 		mazeReceiver = new MazeReceiver(ssq);
@@ -51,6 +56,18 @@ public class OperatorGui {
 		
 		StdDraw.setXscale(0, maze.size + 2);
 		StdDraw.setYscale(0, maze.size + 2);
+		
+		//add some stuff
+		JButton b1 = new JButton("Oh hai");
+		JButton b2 = new JButton("Hello");
+		JButton b3 = new JButton("Hows it going");
+		JPanel buttonPanel = new JPanel(); // use FlowLayout
+		buttonPanel.add(b1);
+		buttonPanel.add(b2);
+		buttonPanel.add(b3);
+		guiJFrame.add(buttonPanel);
+		
+		draw(); //draw the frame before continuing
 		
 		//Start a new thread for WACR
 		int port = 10003 + (robotId - 1) * 1000;
