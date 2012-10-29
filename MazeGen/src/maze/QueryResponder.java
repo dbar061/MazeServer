@@ -80,19 +80,19 @@ public class QueryResponder extends Thread {
 	private void fetchResponse(String query) {
 		response = "";
 		if (sq.getQuery().equals("obstacle")) {
-			response = sq.getQuery(); //send back the original query string
+			response = sq.getQuery() + ","; //send back the original query string
 			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
-				response += "wall"; 
+				response += "wall,"; 
 			}
 			else {
-				response += "empty";
+				response += "empty,";
 			}
 			response += sq.getDirection() + ",";
 			response += sq.getX() + ",";
 			response += sq.getY() + "\0"; //C needs a null at the end of the string
 		}
 		else if (sq.getQuery().equals("sensor")) {
-			response = sq.getQuery(); //send back the original query string
+			response = sq.getQuery() + ",";//send back the original query string
 			if (maze.getSensor(sq.getX(), sq.getY())) {
 				response += "true";
 			}
@@ -102,7 +102,7 @@ public class QueryResponder extends Thread {
 			response += "\0"; //C needs a null at the end of the string
 		}
 		else if (sq.getQuery().equals("switch")) {
-			response = sq.getQuery(); //send back the original query string
+			response = sq.getQuery() + ","; //send back the original query string
 			if (maze.getSwitch(sq.getX(), sq.getY())) {
 				response += "true";
 			}
