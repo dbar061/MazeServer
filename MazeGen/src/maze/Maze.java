@@ -437,7 +437,7 @@ public class Maze implements Serializable {
 	 * @return boolean whether a wall is at the position
 	 */
 	public boolean getWall(String direction, int x, int y) {
-		if (x < size && x >= 0 && y < size && y >= 0) {
+		if (x < (size + 2) && x >= 0 && y < (size + 2) && y >= 0) {
 			if (direction.equalsIgnoreCase("north")) {
 				return north[x][y];
 			}
@@ -467,7 +467,7 @@ public class Maze implements Serializable {
 	 * @return boolean whether a sensor is at the position
 	 */
 	public boolean getSensor(int x, int y) {
-		if (x < size && x >= 0 && y < size && y >= 0) {
+		if (x < (size + 2) && x >= 0 && y < (size + 2) && y >= 0) {
 			boolean sensor[][] = ms.getMotionSensors();
 			return sensor[x][y];
 		}
@@ -487,7 +487,7 @@ public class Maze implements Serializable {
 	 * @return boolean whether a switch is at the position
 	 */
 	public boolean getSwitch(int x, int y) {
-		if (x < size && x >= 0 && y < size && y >= 0) {
+		if (x < (size + 2) && x >= 0 && y < (size + 2) && y >= 0) {
 			if (switches[0].x == x && switches[0].y == y) return true;
 			if (switches[1].x == x && switches[1].y == y) return true;
 			if (switches[2].x == x && switches[2].y == y) return true;
