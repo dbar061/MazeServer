@@ -11,11 +11,19 @@ public class OperatorGui {
 	public static final int WINDOW_HEIGHT = WINDOW_LENGTH;
 	
 	private Point robotPositions[] = new Point[4];
-	int tenmintimervalue=600;
-	int threesectimervalue=3;
+	
+	private int tenmintimervalue=600;
+	private int threesectimervalue=3;
+	
+	//TODO:change these to false when blockide can broadcast these
+	private boolean missionFailed =true;
+	private boolean twominwarning  =true;
+	private boolean threesectimerwarning  =true;
+	
 	KeySender keySender;
 	MazeReceiver mazeReceiver;
 	RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
+	WarningAndCounterReceiver TheWarningAndCounterReceiver  = new WarningAndCounterReceiver(12001);
 	Maze maze = null;
 	
 	public OperatorGui(int robotId) {
@@ -55,10 +63,16 @@ public class OperatorGui {
 	private void drawWarnings() {
 		//Draw the warnings
 		StdDraw.setPenColor(StdDraw.BLACK);
-		//TODO: Add logic for connecting if 3s timer started
-		StdDraw.text(6,0.5, "Not all switches have been turned!");
-		//TODO: Add logic for connecting  2m warning timer
-		StdDraw.text(12,-0.5, "Please get to the Switch zone!");
+
+		if(missionFailed)
+		{StdDraw.text(18,0.5, "Mission Fialed!");}
+		
+		if(threesectimerwarning)
+		{StdDraw.textLeft(1,0.5, "Not all switches have been turned!");}
+		
+		if(twominwarning)
+		{StdDraw.textLeft(10,-0.5, "Please get to the Switch zone!");}
+		
 	}
 
 	private void drawRobots() {
@@ -75,17 +89,42 @@ public class OperatorGui {
 	private void drawCounters() {
 		// Draw the 10min & 3s counter
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.text(0,-0.5, String.valueOf(tenmintimervalue));
-		StdDraw.text(3,-0.5, String.valueOf(threesectimervalue));
+		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenmintimervalue));
+		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threesectimervalue));
 		
 		}
 	
 	
 
 	private void update() {
+		//update robot positions
 		for (int i = 0; i < 4; i++) {
 			robotPositions[i] = robotPositionReceivers[i].getRobotPosition();
 		}
+		
+		//update warnings & counters
+		
+		//TODO:activate this when blockide can broadcast this
+		
+//		tenmintimervalue= TheWarningAndCounterReceiver.tenmintimervalue;
+//		threesectimervalue=TheWarningAndCounterReceiver.threesectimervalue;
+//
+//		if(TheWarningAndCounterReceiver.twominwarning==1)
+//		{twominwarning=true;}
+//		else
+//		{twominwarning=false;}
+//		
+//
+//		if(TheWarningAndCounterReceiver.threesectimerwarning==1)
+//		{threesectimerwarning=true;}
+//		else
+//		{threesectimerwarning=false;}
+//		
+//		if(TheWarningAndCounterReceiver.missionFailed==1)
+//		{missionFailed=true;}
+//		else
+//		{missionFailed=false;}
+		
 		
 		if(maze == null && mazeReceiver.getMaze() != null) {
 			maze = mazeReceiver.getMaze();
