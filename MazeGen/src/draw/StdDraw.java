@@ -625,13 +625,13 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw an arc of radius r, centered on (x, y), from angle1 to angle2 (in
+	 * Draw an arc of radius r, centred on (x, y), from angle1 to angle2 (in
 	 * degrees).
 	 * 
 	 * @param x
-	 *            the x-coordinate of the center of the circle
+	 *            the x-coordinate of the centre of the circle
 	 * @param y
-	 *            the y-coordinate of the center of the circle
+	 *            the y-coordinate of the centre of the circle
 	 * @param r
 	 *            the radius of the circle
 	 * @param angle1
@@ -651,12 +651,12 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw a square of side length 2r, centered on (x, y).
+	 * Draw a square of side length 2r, centred on (x, y).
 	 * 
 	 * @param x
-	 *            the x-coordinate of the center of the square
+	 *            the x-coordinate of the centre of the square
 	 * @param y
-	 *            the y-coordinate of the center of the square
+	 *            the y-coordinate of the centre of the square
 	 * @param r
 	 *            radius is half the length of any side of the square
 	 * @throws RuntimeException
@@ -866,13 +866,13 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 
 	/**
-	 * Draw a filled rectangle of given half width and half height, centered on
+	 * Draw a filled rectangle of given half width and half height, centred on
 	 * (x, y) and rotated by d degrees.
 	 * 
 	 * @param x
-	 *            the x-coordinate of the center of the rectangle
+	 *            the x-coordinate of the centre of the rectangle
 	 * @param y
-	 *            the y-coordinate of the center of the rectangle
+	 *            the y-coordinate of the centre of the rectangle
 	 * @param halfWidth
 	 *            is half the width of the rectangle
 	 * @param halfHeight
@@ -891,11 +891,11 @@ public final class StdDraw implements ActionListener, MouseListener,
 	}
 	
 	/**
-	 * Draw a filled rectangle of given half width and half height, centered at
+	 * Draw a filled rectangle of given half width and half height, centred at
 	 * <location> and rotated by d degrees.
 	 * 
 	 * @param location
-	 *            the Point at the center of the rectangle
+	 *            the Point at the centre of the rectangle
 	 * @param halfWidth
 	 *            is half the width of the rectangle
 	 * @param halfHeight
@@ -1525,7 +1525,8 @@ public final class StdDraw implements ActionListener, MouseListener,
 
 		StdDraw.setPenColor(StdDraw.BOOK_RED);
 		StdDraw.setPenRadius(.02);
-		StdDraw.arc(.8, .2, .1, 200, 45);
+		StdDraw.arc(.8, .2, .1, 120, 60);
+		StdDraw.line(0.8, 0.2, 0.8, 0.3);
 
 		// text
 		StdDraw.setPenRadius();
@@ -1540,8 +1541,12 @@ public final class StdDraw implements ActionListener, MouseListener,
 		StdDraw.line(0, 0, 0, 1);
 	}
 	
+	/**
+	 * Added by Shafqat to get the Frame being drawn
+	 * @return
+	 */
 	public static JFrame getFrame() {
-    	return frame;
-    }
+		return frame;
+	}
 
 }
