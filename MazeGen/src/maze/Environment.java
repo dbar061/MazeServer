@@ -8,16 +8,19 @@ import draw.StdDraw;
  * 
  * @Author:			Devin Barry
  * @Date:			09.10.2012
- * @LastModified:	28.10.2012
+ * @LastModified:	29.10.2012
  * 
- * This code is based on maze gen code from an unspecified author.
- * Original code is available from introcs.cs.princeton.edu
+ * This class emulates the environment on the submarine. It first creates
+ * the submarine maze and then starts the maze sender and maze responder
+ * servers.
  * 
- * Generates a perfect N-by-N maze using depth-first search with
- * a stack.
+ * The maze sender server sends the created maze to the other clients. The
+ * maze responder server allow the robots to question the environment to
+ * detect if they are about to collide with walls, switches, sensors etc.
  * 
- * Note: this program generalises nicely to finding a random tree
- * in a graph.
+ * This class also ensure that all submarine mazes which are built actually
+ * have solutions for all of the robots! It does this by solving the maze
+ * for all robot starting positions first, before it OKs the maze.
  * 
  *************************************************************************/
 
@@ -25,38 +28,33 @@ public class Environment {
 	private final int MAZE_SIZE = 20; // Should be a multiple of 10 for best performance
 	private static Maze maze;
 
-	public static final int WINDOW_LENGTH = 600;
+	public static final int WINDOW_LENGTH = 800;
 	public static final int WINDOW_HEIGHT = WINDOW_LENGTH;
-
-
-	// public static final double SCALE = 2.0; //how the maze dimensions relate
-	// to the window dimensions
-	// private static final double L_SCALE = WINDOW_LENGTH * SCALE;
-	// private static final double H_SCALE = WINDOW_HEIGHT * SCALE;
-
+	
+	private boolean validMaze;
+	
 	public Environment() {
-		StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH); // pixel size of
-																// window
-		// StdDraw.setXscale(0, L_SCALE);
-		// StdDraw.setYscale(0, H_SCALE);
-
+		StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH); // pixel size of window
+		
+		//Determines how the maze scales within the window
 		StdDraw.setXscale(0, MAZE_SIZE + 2);
 		StdDraw.setYscale(0, MAZE_SIZE + 2);
-		maze = new Maze(MAZE_SIZE);
 		
-		MazeSender mazeSender = new MazeSender(maze);
-		mazeSender.start();
+		validMaze = false;
 		
-		QueryResponder queryResponder = new QueryResponder(maze);
-		queryResponder.start();
-
+		maze = new Maze(MAZE_SIZE); //create a new maze object
+		
+		StdDraw.show(0); //Show the maze window we have just created
+		maze.draw(); //Draw the maze
+		StdDraw.show(200); //Show this for 200 ms
+		validMaze = solve(false); //solve the maze
 	}
 
-	public void draw() {
-		maze.draw();
-	}
-
-	public void solve(boolean draw) {
+	/**
+	 * Solves the maze for four robot starting positions
+	 * @param draw
+	 */
+	private boolean solve(boolean draw) {
 		maze.draw();
 		
 		Point robotPositions[] = new Point[4];
@@ -65,16 +63,21 @@ public class Environment {
 		robotPositions[2] = new Point(MAZE_SIZE, 1); //bottom right
 		robotPositions[3] = new Point(MAZE_SIZE, MAZE_SIZE); //top right
 		
+		//one position for each robot
+		boolean[] solved = {false, false, false, false};
+		
 		for (int i = 0; i < 4; i++) {
 			if (robotPositions[i] != null) {
-				maze.solve(robotPositions[i], maze.GetCentrePoint(), draw);
-				System.out.println("Robot " + (i + 1) + " solved");
+				solved[i] = maze.solve(robotPositions[i], maze.GetCentrePoint(), draw);
+				//System.out.println("Robot " + (i + 1) + " path solved: " + solved[i]);
 				if (draw) {
 					StdDraw.clear();
 					maze.draw();
 				}
 			}
 		}
+		
+		return (solved[0] && solved[1] && solved[2] && solved[3]);
 	}
 
 	/**
@@ -85,12 +88,15 @@ public class Environment {
 	 */
 	public static void main(String[] args) {
 		Environment enviroment = new Environment();
-		StdDraw.show(0);
-		maze.draw();
-		StdDraw.show(200);
-		enviroment.solve(false);
 		//no need for explicit animation calls
 		//animation is dealt with internally inside StdDraw
+		
+		//Create the maze sender server
+		MazeSender mazeSender = new MazeSender(maze);
+		mazeSender.start();
+		//Create the query responder server
+		QueryResponder queryResponder = new QueryResponder(maze);
+		queryResponder.start();
 	}
 
 }
