@@ -6,6 +6,7 @@ import java.awt.Point;
 import maze.Maze;
 import draw.StdDraw;
 import controller.ServerQueue;
+import controller.SimpleServerQueue;
 
 public class OperatorGui {
 	public static final int WINDOW_LENGTH = 600;
@@ -24,12 +25,14 @@ public class OperatorGui {
 	private MazeReceiver mazeReceiver;
 	private RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
 	private WarningAndCounterReceiver wacr;
-	private Maze maze = null;
+	private Maze maze;
 	
 	private ServerQueue<Integer> sq;
+	private SimpleServerQueue<Maze> ssq;
 	
 	public OperatorGui(int robotId) {
 		sq = new ServerQueue<Integer>();
+		ssq = new SimpleServerQueue<Maze>();
 		
 		StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH);
 		
@@ -40,14 +43,20 @@ public class OperatorGui {
 		
 		StdDraw.getFrame().setTitle("Robot operator " + robotId + " GUI");
 		
-		mazeReceiver = new MazeReceiver();
+		//Start a new thread for Maze Receiver
+		mazeReceiver = new MazeReceiver(ssq);
 		mazeReceiver.start();
+		maze = ssq.get(); //this will block until we receive a maze
 		
+		StdDraw.setXscale(0, maze.size + 2);
+		StdDraw.setYscale(0, maze.size + 2);
+		
+		//Start a new thread for WACR
 		int port = 10003 + (robotId - 1) * 1000;
 		wacr = new WarningAndCounterReceiver(port, sq);
-		wacr.start();
-	
+		wacr.start();	
 
+		//Start 4 new threads, one for each robot
 		for (int i = 0; i < 4; i++) {
 			int portNumber = 10001 + (i * 1000);
 			robotPositionReceivers[i] = new RobotPositionReceiver(portNumber);
@@ -55,55 +64,7 @@ public class OperatorGui {
 		}
 	}
 	
-	private void draw() {
-		StdDraw.clear();
-		
-		if(maze != null) {
-			maze.draw();
-		}
-		
-		drawRobots();
-		drawCounters();
-		drawWarnings();
-		
-		StdDraw.show(100);
-	}
-
-	private void drawWarnings() {
-		//Draw the warnings
-		StdDraw.setPenColor(StdDraw.BLACK);
-
-		if (missionFailed) {
-			StdDraw.text(18,0.5, "Mission Fialed!");
-		}
-		
-		if (threeSecTimerWarning) {
-			StdDraw.textLeft(1,0.5, "Not all switches have been turned!");
-		}
-		
-		if (twoMinWarning) {
-			StdDraw.textLeft(10,-0.5, "Please get to the Switch zone!");
-		}
-		
-	}
-
-	private void drawRobots() {
-		// Draw the four robots
-		StdDraw.setPenColor(StdDraw.RED);
-		for (int i = 0; i < 4; i++) {
-			if (robotPositions[i] != null) {
-				StdDraw.filledCircle(robotPositions[i].getX() + 0.5,
-						robotPositions[i].getY() + 0.5, 0.375);
-			}
-		}
-	}
 	
-	private void drawCounters() {
-		// Draw the 10min & 3s counter
-		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinuteTimerValue));
-		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));	
-	}
 	
 	
 
@@ -144,17 +105,64 @@ public class OperatorGui {
 			this.missionFailed = true;
 		}
 		else {
-			this.missionFailed  =false;
-		}
-		
-		
-		if(maze == null && mazeReceiver.getMaze() != null) {
-			maze = mazeReceiver.getMaze();
-			StdDraw.setXscale(0, maze.size + 2);
-			StdDraw.setYscale(0, maze.size + 2);
+			this.missionFailed = false;
 		}
 	}
+	
+	
+	/*********************************************************
+	 * Draw Methods
+	 *********************************************************/
+	private void draw() {
+		StdDraw.clear();
+		
+		if (maze != null) {
+			maze.draw();
+		}
+		
+		drawRobots();
+		drawCounters();
+		drawWarnings();
+		
+		StdDraw.show(100);
+	}
 
+	private void drawWarnings() {
+		//Draw the warnings
+		StdDraw.setPenColor(StdDraw.BLACK);
+
+		if (missionFailed) {
+			StdDraw.text(18, 0.5, "Mission Failed!");
+		}
+		
+		if (threeSecTimerWarning) {
+			StdDraw.textLeft(1, 0.5, "Not all switches have been turned!");
+		}
+		
+		if (twoMinWarning) {
+			StdDraw.textLeft(10, -0.5, "Please get to the Switch zone!");
+		}
+		
+	}
+
+	private void drawRobots() {
+		// Draw the four robots
+		StdDraw.setPenColor(StdDraw.RED);
+		for (int i = 0; i < 4; i++) {
+			if (robotPositions[i] != null) {
+				StdDraw.filledCircle(robotPositions[i].getX() + 0.5, robotPositions[i].getY() + 0.5, 0.375);
+			}
+		}
+	}
+	
+	private void drawCounters() {
+		// Draw the 10min & 3s counter
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinuteTimerValue));
+		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));	
+	}
+
+	
 	/**
 	 * Creates the GUI for a single robot operator
 	 * @param args
