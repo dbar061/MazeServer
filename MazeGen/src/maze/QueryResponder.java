@@ -80,31 +80,36 @@ public class QueryResponder extends Thread {
 	private void fetchResponse(String query) {
 		response = "";
 		if (sq.getQuery().equals("obstacle")) {
-			response = sq.getQuery();
+			response = sq.getQuery(); //send back the original query string
 			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
-				response += "wall"; //short for wall
+				response += "wall"; 
 			}
 			else {
-				response += "empty"; //short for empty
+				response += "empty";
 			}
+			response += sq.getDirection() + ",";
+			response += sq.getX() + ",";
+			response += sq.getY() + "\0"; //C needs a null at the end of the string
 		}
 		else if (sq.getQuery().equals("sensor")) {
-			response = sq.getQuery();
+			response = sq.getQuery(); //send back the original query string
 			if (maze.getSensor(sq.getX(), sq.getY())) {
 				response += "true";
 			}
 			else {
 				response += "false";
 			}
+			response += "\0"; //C needs a null at the end of the string
 		}
 		else if (sq.getQuery().equals("switch")) {
-			response = sq.getQuery();
+			response = sq.getQuery(); //send back the original query string
 			if (maze.getSwitch(sq.getX(), sq.getY())) {
 				response += "true";
 			}
 			else {
 				response += "false";
 			}
+			response += "\0"; //C needs a null at the end of the string
 		}
 		else {
 			System.out.println("Invalid query: " + query);
