@@ -1,17 +1,18 @@
 package operator;
 
 import java.awt.Point;
-import java.io.PrintStream;
+//import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import console.DevinConsole;
+//import console.DevinConsole;
 
 public class RobotPositionReceiver extends Thread {
+	
 	private int receivingPort;
 	private Point robotPosition;
-	private DevinConsole dc;
-	private PrintStream out;
+	//private DevinConsole dc;
+	//private PrintStream out;
 
 	public RobotPositionReceiver(int receivingPort) {
 		this.receivingPort = receivingPort;
