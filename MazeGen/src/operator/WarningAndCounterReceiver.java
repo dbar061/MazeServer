@@ -10,8 +10,8 @@ public class WarningAndCounterReceiver extends Thread {
 	public int missionFailed ;
 	public int tenmintimervalue;
 	public int threesectimervalue ;
-	public int twominwarning ;
-	public int threesectimerwarning ;
+	public int twoMinWarning ;
+	public int threeSecTimerWarning ;
 	
 	public WarningAndCounterReceiver(int port)
 	{
@@ -36,8 +36,8 @@ public class WarningAndCounterReceiver extends Thread {
 				missionFailed = receiveData[0];
 				tenmintimervalue= bytesToInt(receiveData[1], receiveData[2]);
 			    threesectimervalue = bytesToInt(receiveData[3], receiveData[4]);
-			    twominwarning = receiveData[5];
-			    threesectimerwarning = receiveData[6];
+			    twoMinWarning = receiveData[5];
+			    threeSecTimerWarning = receiveData[6];
 				serverSocket.close();
 			} catch (Exception e) {
 				e.printStackTrace();

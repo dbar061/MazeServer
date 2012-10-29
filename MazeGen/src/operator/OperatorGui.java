@@ -12,17 +12,17 @@ public class OperatorGui {
 	
 	private Point robotPositions[] = new Point[4];
 	
-	private int tenmintimervalue=600;
-	private int threesectimervalue=3;
+	private int tenmintimervalue = 600;
+	private int threesectimervalue = 3;
 	
-	private boolean missionFailed =false;
-	private boolean twominwarning  =false;
-	private boolean threesectimerwarning  =false;
+	private boolean missionFailed = false;
+	private boolean twoMinWarning = false;
+	private boolean threeSecTimerWarning = false;
 	
 	KeySender keySender;
 	MazeReceiver mazeReceiver;
 	RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
-	private WarningAndCounterReceiver TheWarningAndCounterReceiver  = new WarningAndCounterReceiver(10997);
+	private WarningAndCounterReceiver wacr  = new WarningAndCounterReceiver(10997);
 	Maze maze = null;
 	
 	public OperatorGui(int robotId) {
@@ -38,7 +38,7 @@ public class OperatorGui {
 		mazeReceiver = new MazeReceiver();
 		mazeReceiver.start();
 		
-		TheWarningAndCounterReceiver.start();
+		wacr.start();
 
 		for (int i = 0; i < 4; i++) {
 			int portNumber = 10001 + (i * 1000);
@@ -68,10 +68,10 @@ public class OperatorGui {
 		if(missionFailed)
 		{StdDraw.text(18,0.5, "Mission Fialed!");}
 		
-		if(threesectimerwarning)
+		if(threeSecTimerWarning)
 		{StdDraw.textLeft(1,0.5, "Not all switches have been turned!");}
 		
-		if(twominwarning)
+		if(twoMinWarning)
 		{StdDraw.textLeft(10,-0.5, "Please get to the Switch zone!");}
 		
 	}
@@ -104,21 +104,23 @@ public class OperatorGui {
 		}
 		
 		//update warnings & counters
-		tenmintimervalue= TheWarningAndCounterReceiver.tenmintimervalue;
-		threesectimervalue=TheWarningAndCounterReceiver.threesectimervalue;
+		tenmintimervalue= wacr.tenmintimervalue;
+		threesectimervalue=wacr.threesectimervalue;
 
-		if(TheWarningAndCounterReceiver.twominwarning==1)
-		{twominwarning=true;}
-		else
-		{twominwarning=false;}
+		if (wacr.twoMinWarning == 1) {
+			twoMinWarning=true;
+		}
+		else {
+			twoMinWarning=false;
+		}
 		
 
-		if(TheWarningAndCounterReceiver.threesectimerwarning==1)
-		{threesectimerwarning=true;}
+		if(wacr.threeSecTimerWarning == 1)
+		{threeSecTimerWarning=true;}
 		else
-		{threesectimerwarning=false;}
+		{threeSecTimerWarning=false;}
 		
-		if(TheWarningAndCounterReceiver.missionFailed==1)
+		if(wacr.missionFailed==1)
 		{missionFailed=true;}
 		else
 		{missionFailed=false;}
