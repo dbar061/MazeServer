@@ -12,8 +12,8 @@ public class OperatorGui {
 	
 	private Point robotPositions[] = new Point[4];
 	
-	private int tenmintimervalue = 600;
-	private int threesectimervalue = 3;
+	private int tenMinTimerValue = 600;
+	private int threeSecTimerValue = 3;
 	
 	private boolean missionFailed = false;
 	private boolean twoMinWarning = false;
@@ -90,8 +90,8 @@ public class OperatorGui {
 	private void drawCounters() {
 		// Draw the 10min & 3s counter
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenmintimervalue));
-		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threesectimervalue));
+		StdDraw.textLeft(0,-0.5, "Seconds left:" + String.valueOf(600-tenMinTimerValue));
+		StdDraw.textLeft(5,-0.5, "3sec timer:" + String.valueOf(threeSecTimerValue));
 		
 		}
 	
@@ -104,26 +104,30 @@ public class OperatorGui {
 		}
 		
 		//update warnings & counters
-		tenmintimervalue= wacr.tenmintimervalue;
-		threesectimervalue=wacr.threesectimervalue;
+		tenMinTimerValue = wacr.tenMinuteTimerValue;
+		threeSecTimerValue = wacr.threeSecTimerValue;
 
 		if (wacr.twoMinWarning == 1) {
-			twoMinWarning=true;
+			twoMinWarning = true;
 		}
 		else {
-			twoMinWarning=false;
+			twoMinWarning = false;
 		}
 		
 
-		if(wacr.threeSecTimerWarning == 1)
-		{threeSecTimerWarning=true;}
-		else
-		{threeSecTimerWarning=false;}
+		if (wacr.threeSecTimerWarning == 1) {
+			threeSecTimerWarning = true;
+		}
+		else {
+			threeSecTimerWarning = false;
+		}
 		
-		if(wacr.missionFailed==1)
-		{missionFailed=true;}
-		else
-		{missionFailed=false;}
+		if (wacr.missionFailed == 1) {
+			missionFailed = true;
+		}
+		else {
+			missionFailed  =false;
+		}
 		
 		
 		if(maze == null && mazeReceiver.getMaze() != null) {
@@ -133,6 +137,10 @@ public class OperatorGui {
 		}
 	}
 
+	/**
+	 * Creates the GUI for a single robot operator
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		int robotId = 1;
 		if(args.length > 0) {
@@ -140,8 +148,6 @@ public class OperatorGui {
 		}
 		
 		OperatorGui operatorGui = new OperatorGui(robotId);
-		
-		
 		StdDraw.show(0);
 
 		while (true) {

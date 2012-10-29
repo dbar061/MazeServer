@@ -15,7 +15,7 @@ public class WarningAndCounterReceiver extends Thread {
 	private int receivingPort;
 	public int missionFailed ;
 	public int tenMinuteTimerValue;
-	public int threesectimervalue ;
+	public int threeSecTimerValue ;
 	public int twoMinWarning ;
 	public int threeSecTimerWarning ;
 	
@@ -40,7 +40,7 @@ public class WarningAndCounterReceiver extends Thread {
 				//TODO: check these values, connect to GUI, maybe merge into position received from robot
 				missionFailed = receiveData[0];
 				tenMinuteTimerValue = bytesToInt(receiveData[1], receiveData[2]);
-				threesectimervalue = bytesToInt(receiveData[3], receiveData[4]);
+				threeSecTimerValue = bytesToInt(receiveData[3], receiveData[4]);
 				twoMinWarning = receiveData[5];
 				threeSecTimerWarning = receiveData[6];
 				serverSocket.close();
