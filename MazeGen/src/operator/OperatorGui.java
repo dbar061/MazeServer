@@ -23,7 +23,7 @@ public class OperatorGui {
 	
 	private KeySender keySender;
 	private MazeReceiver mazeReceiver;
-	private RobotPositionReceiver robotPositionReceivers[] = new RobotPositionReceiver[4];
+	private RobotPositionReceiver[] robotPositionReceivers;
 	private WarningAndCounterReceiver wacr;
 	private Maze maze;
 	
@@ -33,6 +33,7 @@ public class OperatorGui {
 	public OperatorGui(int robotId) {
 		sq = new ServerQueue<Integer>();
 		ssq = new SimpleServerQueue<Maze>();
+		robotPositionReceivers = new RobotPositionReceiver[4]; //for four robots
 		
 		StdDraw.setCanvasSize(WINDOW_HEIGHT, WINDOW_LENGTH);
 		
@@ -57,6 +58,7 @@ public class OperatorGui {
 		wacr.start();	
 
 		//Start 4 new threads, one for each robot
+		//This could be upgrade to use message passing
 		for (int i = 0; i < 4; i++) {
 			int portNumber = 10001 + (i * 1000);
 			robotPositionReceivers[i] = new RobotPositionReceiver(portNumber);
@@ -77,7 +79,15 @@ public class OperatorGui {
 		if (sq.get() == 1) missionFailed = true;
 		else missionFailed = false;
 		
-		tenMinuteTimerValue = sq.get();
+		int elapsedTime = sq.get();
+		if (elapsedTime <= 600) {
+			tenMinuteTimerValue = 600 - elapsedTime;
+		}
+		else {
+			tenMinuteTimerValue = 0;
+		}
+		
+		
 		threeSecTimerValue = sq.get();
 		
 		if (sq.get() == 1) twoMinWarning = true;
