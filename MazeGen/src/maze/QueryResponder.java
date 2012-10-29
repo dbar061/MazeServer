@@ -80,19 +80,30 @@ public class QueryResponder extends Thread {
 	private void fetchResponse(String query) {
 		response = "";
 		if (sq.getQuery().equals("obstacle")) {
+			response = sq.getQuery();
 			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
-				response = "wall"; //short for wall
+				response += "wall"; //short for wall
 			}
 			else {
-				response = "empty"; //short for empty
+				response += "empty"; //short for empty
 			}
 		}
 		else if (sq.getQuery().equals("sensor")) {
+			response = sq.getQuery();
 			if (maze.getSensor(sq.getX(), sq.getY())) {
-				response = "true";
+				response += "true";
 			}
 			else {
-				response = "false";
+				response += "false";
+			}
+		}
+		else if (sq.getQuery().equals("switch")) {
+			response = sq.getQuery();
+			if (maze.getSwitch(sq.getX(), sq.getY())) {
+				response += "true";
+			}
+			else {
+				response += "false";
 			}
 		}
 		else {
