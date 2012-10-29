@@ -7,7 +7,7 @@ import controller.ServerQueue;
 
 
 /**
- * This class needs fixing
+ * This class now supports message passing
  * @author dbar061
  *
  */
@@ -55,7 +55,7 @@ public class WarningAndCounterReceiver extends Thread {
 				//twoMinWarning = receiveData[5];
 				//threeSecTimerWarning = receiveData[6];
 				serverSocket.close();
-				System.out.println("Received wacr");
+				//System.out.println("Received wacr");
 			}
 			catch (Exception e) {
 				e.printStackTrace();

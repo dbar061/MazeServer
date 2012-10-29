@@ -39,7 +39,7 @@ public class ServerQueue<E> {
 		} catch (InterruptedException ie) {
 			System.out.println("InterruptedException caught");
 		}
-		System.out.println("Got: " + e);
+		//System.out.println("Got: " + e);
 		return e;
 	}
 
