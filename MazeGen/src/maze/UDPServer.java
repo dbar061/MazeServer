@@ -1,21 +1,47 @@
 package maze;
 
 import java.net.*;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
+/**
+ * There is a bug in the server where strings from the past are
+ * not overwritten properly. Find it and destory it!
+ * @author: Devin Barry
+ * @date: 24.10.2012
+ *
+ */
 public class UDPServer {
 	
 	public UDPServer() {
 	}
 	
-	
-	public void startServer(Maze m) throws Exception {
-		DatagramSocket serverSocket = new DatagramSocket(10001);
+	/**
+	 * starts a server to host the environment data
+	 * Specifically it hosts the maze and motion sensors
+	 * @param m
+	 * @throws Exception
+	 */
+	public void startServer(Maze m) {
+		DatagramSocket serverSocket = null;
+		try {
+			serverSocket = new DatagramSocket(10001);
+		}
+		catch (IOException ioe) {
+			System.out.println("Unable to create UDP Socket! Exiting.....");
+			System.exit(1);
+		}
 		byte[] receiveData = new byte[1024];
 		byte[] sendData = new byte[1024];
 		for (int i = 0; i < 5; i++) {
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-			serverSocket.receive(receivePacket);
+			try {
+				serverSocket.receive(receivePacket);
+			}
+			catch (IOException ioe) {
+				System.out.println("Error during socket read! Exiting.....");
+				System.exit(1);
+			}
 			String sentence = new String( receivePacket.getData());
 			
 			System.out.println("RECEIVED: " + sentence);
@@ -49,7 +75,13 @@ public class UDPServer {
 			String response = new Boolean(result).toString();
 			sendData = response.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
-			serverSocket.send(sendPacket);
+			try {
+				serverSocket.send(sendPacket);
+			}
+			catch (IOException ioe) {
+				System.out.println("Error during socket write! Exiting.....");
+				System.exit(1);
+			}
 		}
 		serverSocket.close();
 	}
