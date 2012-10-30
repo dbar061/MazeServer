@@ -1,7 +1,12 @@
-package maze;
+package devin.maze;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+
+import maze.Maze;
+
+import devin.udp.UDPServer;
+import draw.StdDraw;
 
 /*************************************************************************
  * 
@@ -120,11 +125,11 @@ public class MazeGen {
 
 	// a test client
 	public static void main(String[] args) {
-		int N = 100; //Number should be a multiple of 10 for best performance
+		int N = 30; //Number should be a multiple of 10 for best performance
 		MazeGen maze = new MazeGen(N);
 		StdDraw.show(0);
 		//maze.draw();
-		maze.solve(true);
+		maze.solve(false);
 		UDPServer udps = new UDPServer();
 		try {
 			udps.startServer(m);

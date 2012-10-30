@@ -1,8 +1,10 @@
-package maze;
+package devin.udp;
 
 import java.net.*;
 import java.io.IOException;
 import java.util.StringTokenizer;
+
+import maze.Maze;
 
 /**
  * There is a bug in the server where strings from the past are
