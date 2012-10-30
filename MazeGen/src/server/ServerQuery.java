@@ -28,23 +28,34 @@ public class ServerQuery {
 		String regex = p.pattern();
 		String[] tokens = rawData.split(regex, 0); //apply pattern an infinite number of times
 		
-		//Debug
-		//System.out.print("tokens: ");
-		//for (String s: tokens) {
-		//	System.out.println("\"" + s + "\"");
-		//}
-		
-		try {
-			robotID = Integer.parseInt(tokens[0].trim());
-			x = Integer.parseInt(tokens[3].trim());
-			y = Integer.parseInt(tokens[4].trim());
-		}
-		catch (NumberFormatException e) {
-			System.out.println("Number formatting Error!!!");
-		}
-		
 		query = tokens[1];
-		direction = tokens[2];
+		robotID = Integer.parseInt(tokens[0].trim());
+		
+		if(query.equals("obstacle")) {
+			//Debug
+			//System.out.print("tokens: ");
+			//for (String s: tokens) {
+			//	System.out.println("\"" + s + "\"");
+			//}
+			
+			try {
+				x = Integer.parseInt(tokens[3].trim());
+				y = Integer.parseInt(tokens[4].trim());
+			}
+			catch (NumberFormatException e) {
+				System.out.println("Number formatting Error!!!");
+			}
+			
+			direction = tokens[2];
+		} else if(query.equals("sensor") || query.equals("switch")) {
+			try {
+				x = Integer.parseInt(tokens[2].trim());
+				y = Integer.parseInt(tokens[3].trim());
+			}
+			catch (NumberFormatException e) {
+				System.out.println("Number formatting Error!!!");
+			}
+		}
 		//discard all other tokens, they are not needed
 	}
 	

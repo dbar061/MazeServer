@@ -56,7 +56,7 @@ public class QueryResponder extends Thread {
 				sq = new ServerQuery(receiveData); //create a new server query
 				System.out.println("RECEIVED: " + query);
 				
-				fetchResponse(query);
+				buildResponse(query);
 				
 				//If the query was valid, send a response
 				if (response != "") {
@@ -77,23 +77,40 @@ public class QueryResponder extends Thread {
 	 * Calculates the correct response for the query received
 	 * @param query
 	 */
-	private void fetchResponse(String query) {
+	private void buildResponse(String query) {
 		response = "";
 		if (sq.getQuery().equals("obstacle")) {
+			response = sq.getQuery() + ","; //send back the original query string
 			if (maze.getWall(sq.getDirection(), sq.getX(), sq.getY())) {
-				response = "wall"; //short for wall
+				response += "wall,"; 
 			}
 			else {
-				response = "empty"; //short for empty
+				response += "empty,";
 			}
+			response += sq.getDirection() + ",";
+			response += sq.getX() + ",";
+			response += sq.getY() + "\0"; //C needs a null at the end of the string
 		}
 		else if (sq.getQuery().equals("sensor")) {
+			response = sq.getQuery() + ",";//send back the original query string
 			if (maze.getSensor(sq.getX(), sq.getY())) {
-				response = "true";
+				response += "true,";
 			}
 			else {
-				response = "false";
+				response += "false,";
 			}
+			response += sq.getX() + ",";
+			response += sq.getY() + "\0"; //C needs a null at the end of the string
+		}
+		else if (sq.getQuery().equals("switch")) {
+			response = sq.getQuery() + ","; //send back the original query string
+			if (maze.getSwitch(sq.getX(), sq.getY())) {
+				response += "true";
+			}
+			else {
+				response += "false";
+			}
+			response += "\0"; //C needs a null at the end of the string
 		}
 		else {
 			System.out.println("Invalid query: " + query);
