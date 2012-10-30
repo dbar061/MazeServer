@@ -120,11 +120,11 @@ public class MazeGen {
 
 	// a test client
 	public static void main(String[] args) {
-		int N = 30; //Number should be a multiple of 10 for best performance
+		int N = 100; //Number should be a multiple of 10 for best performance
 		MazeGen maze = new MazeGen(N);
 		StdDraw.show(0);
 		//maze.draw();
-		maze.solve(false);
+		maze.solve(true);
 		UDPServer udps = new UDPServer();
 		try {
 			udps.startServer(m);
