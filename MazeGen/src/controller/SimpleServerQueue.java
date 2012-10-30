@@ -11,7 +11,10 @@ package controller;
  * pass elements of type E from different socket threads between
  * themselves. This class allows consumer threads to sleep while
  * waiting for producer threads to put an item into the queue.
- *
+ * 
+ * This class has a queue length of 1. The producer will block
+ * when one item is in the queue. The consumer will block when
+ * the queue is empty.
  */
 public class SimpleServerQueue<E> {
 

@@ -2,6 +2,22 @@ package server;
 
 import java.util.regex.Pattern;
 
+
+/*************************************************************************
+ * 
+ * @Author:			Devin Barry
+ * @Date:			27.10.2012
+ * @LastModified:	29.10.2012
+ * 
+ * This class processes queries from the BlokIDE robot. The robot requests
+ * data from the environment in the form of a query string. This data is
+ * defined in our protocol document.
+ * 
+ * This class breaks the query into its respective strings and performs
+ * error checking and other functionality to ensure the data from BlokIDE
+ * can be processed correctly in Java.
+ * 
+ *************************************************************************/
 public class ServerQuery {
 	
 	byte[] rawBytes;

@@ -47,7 +47,9 @@ public class Environment {
 		StdDraw.show(0); //Show the maze window we have just created
 		maze.draw(); //Draw the maze
 		StdDraw.show(200); //Show this for 200 ms
-		validMaze = solve(false); //solve the maze
+		
+		//pass the argument "true" to see the maze solve
+		validMaze = solve(false); //solve the maze, but don't draw it
 	}
 
 	/**

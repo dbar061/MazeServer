@@ -6,28 +6,30 @@ import java.net.InetSocketAddress;
 import controller.ServerQueue;
 
 
-/**
- * This class now supports message passing
- * @author dbar061
- *
- */
+/*************************************************************************
+ * 
+ * @author:			Jun-Hong
+ * @Author:			Devin Barry
+ * @Date:			28.10.2012
+ * @LastModified:	29.10.2012
+ * 
+ * This class receives timer and warning data from BlokIDE. It uses a
+ * message passing queue to pass data between threads.
+ * 
+ * Data comes in a specific order from BlokeIDE and this order is
+ * assumed to be unchanging in this class. No checking is performed to
+ * ensure that data does not become disordered.
+ * 
+ *************************************************************************/
 public class WarningAndCounterReceiver extends Thread {
 
 	private int receivingPort;
 	private ServerQueue<Integer> sq;
 	
-	//public int missionFailed ;
-	//public int tenMinuteTimerValue;
-	//public int threeSecTimerValue ;
-	//public int twoMinWarning ;
-	//public int threeSecTimerWarning ;
-	
 	public WarningAndCounterReceiver(int port, ServerQueue<Integer> sq) {
 		this.receivingPort = port;
 		this.sq = sq;
 	}
-
-
 	
 	public void run() {
 		while (true) {
@@ -47,15 +49,7 @@ public class WarningAndCounterReceiver extends Thread {
 				sq.put(new Integer(receiveData[5])); //twoMinWarning
 				sq.put(new Integer(receiveData[6])); //threeSecTimerWarning
 			
-				//TODO: check these values, connect to GUI, maybe merge into position received from robot
-				
-				
-				//tenMinuteTimerValue = bytesToInt(receiveData[1], receiveData[2]);
-				//threeSecTimerValue = bytesToInt(receiveData[3], receiveData[4]);
-				//twoMinWarning = receiveData[5];
-				//threeSecTimerWarning = receiveData[6];
 				serverSocket.close();
-				//System.out.println("Received wacr");
 			}
 			catch (Exception e) {
 				e.printStackTrace();

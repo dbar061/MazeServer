@@ -1,10 +1,10 @@
 package console;
 
 /**
- * @file TextAreaOutputStream.java
- * @author Devin Barry
- * @date 01/10/2012
- * @lastModification 12/10/2012
+ * @file				TextAreaOutputStream.java
+ * @author				Devin Barry
+ * @date 				01/10/2012
+ * @lastModification	12/10/2012
  *  
  * TextAreaOutput stream creates an output stream that prints to
  * a JTextArea. I have overridden the two required write methods

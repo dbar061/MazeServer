@@ -41,9 +41,11 @@ package console;
  * DevinConsole is a class that creates a separate output window which
  * is designed to act just like a console output.
  * It can print messages which are sent it, just like System.out.
- * This class was especially designed for use with SystemJ code.
- * This makes it easier to see certain messages from the huge list of
- * others that are auto-printed by SystemJ.
+ * 
+ * This class differs from Console in that it does not have a static
+ * PrintStream as its output, and thus each time this class is
+ * instantiated, a new seperate print stream is created. This allows
+ * the use of multiple windows of output.
  * 
  * Code here is almost identical to Console, but there is no static
  * output.

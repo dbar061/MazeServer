@@ -7,6 +7,20 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 //import console.DevinConsole;
 
+/**
+ * RobotPositionReceiver.java
+ * 
+ * Receives back from BlokIDE the position of the current robot
+ * This data is passed to the client which instantiated this
+ * RobotPositionReceiver, which uses the data to draw the robot
+ * in its correct position.
+ * 
+ * @author:			Shafqat Bhuiyan
+ * @author:			Devin Barry
+ * @date:			27.10.2012
+ * @lastModified:	29.10.2012
+ * 
+ */
 public class RobotPositionReceiver extends Thread {
 	
 	private int receivingPort;

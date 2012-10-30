@@ -15,6 +15,7 @@ import draw.StdDraw;
  * The maze class contains the data structures and methods for generating
  * and solving a maze.
  *************************************************************************/
+
 public class Maze implements Serializable {
 	
 	/**
